@@ -1,0 +1,9 @@
+$TTL 1D
+@        IN        SOA  ns1.int.cyber.psych0si.is. admin.int.cyber.psych0si.is. (
+                        2007091701 ; serial
+                        30800      ; refresh
+                        7200       ; retry
+                        604800     ; expire
+                        300 )      ; minimum
+         IN        NS    ns1.int.cyber.psych0si.is.
+1        IN        PTR   ns1.int.cyber.psych0si.is.

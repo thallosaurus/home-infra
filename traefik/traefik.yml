@@ -1,0 +1,19 @@
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: DEBUG
+
+providers:
+  file:
+    watch: true
+    filename: "/local/dynamic.yml"
+  consulCatalog:
+    endpoint:
+      scheme: http
+      address: http://10.0.0.1:8500
+    prefix: traefik
+    exposedByDefault: false
+
+accessLog: {}

@@ -1,0 +1,13 @@
+$TTL    604800
+@       IN      SOA     ns1.apps.cyber.psych0si.is. admin.apps.cyber.psych0si.is. (
+                  3         ; Serial
+             604800         ; Refresh
+              86400         ; Retry
+            2419200         ; Expire
+             604800 )       ; Negative Cache TTL
+;
+@       IN      NS      ns1.apps.cyber.psych0si.is.      ; delete this line
+ns1       IN      A       10.0.0.1       ; delete this line
+gitea       IN      CNAME       traefik.service.consul.       ; delete this line
+minio       IN      CNAME       traefik.service.consul.       ; delete this line
+s3       IN      CNAME       traefik.service.consul.       ; delete this line
