@@ -12,6 +12,19 @@ job "smb" {
       }
     }
 
+    service {
+      name = "samba"
+      port = "smb"
+
+      check {
+        name     = "Smb Check"
+        type     = "tcp"
+        protocol = "smb"
+        interval = "10s"
+        timeout  = "2s"
+      }
+    }
+
     volume "fs" {
       type      = "host"
       read_only = false
@@ -20,6 +33,12 @@ job "smb" {
 
     task "samba" {
       driver = "docker"
+
+      #vault {
+      #  change_mode = "noop"
+      #  #role = "prod"
+      #  env = true
+      #}
 
       template {
         destination = "smb_testfile.txt"

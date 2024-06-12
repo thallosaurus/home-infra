@@ -52,7 +52,7 @@ job "minio" {
       }
 
       env {
-        MINIO_ROOT_USER     = "test"
+        MINIO_ROOT_USER     = "akasha"
         MINIO_ROOT_PASSWORD = "testtest123"
       }
 
