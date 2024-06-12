@@ -10,15 +10,15 @@ resource "docker_container" "drone" {
   name  = "drone"
   image = docker_image.drone.image_id
 
-  #  mounts {
-  #    target = "/var/run/docker.sock"
-  #    type = "bind"
-  #    source = "/var/run/docker.sock"
-  #  }
+  mounts {
+    target = "/var/run/docker.sock"
+    type   = "bind"
+    source = "/var/run/docker.sock"
+  }
 
   volumes {
     container_path = "/data"
-    volume_name = docker_volume.drone-data.name
+    volume_name    = docker_volume.drone-data.name
   }
 
   restart = "always"
@@ -48,21 +48,21 @@ resource "docker_container" "drone" {
 
 
 #resource "consul_service" "drone" {
-  #name  = "drone"
-  #node  = "snappy"
-  #port  = 38259
-  #check {
-  #  check_id = "drone-health-check"
-  #  name = "Drone Health check"
-  #  interval = "10s"
-  #  timeout = "2s"
-  #  http = "/"
-  #}
+#name  = "drone"
+#node  = "snappy"
+#port  = 38259
+#check {
+#  check_id = "drone-health-check"
+#  name = "Drone Health check"
+#  interval = "10s"
+#  timeout = "2s"
+#  http = "/"
+#}
 
 #  tags = ["traefik",
 #    "traefik.enable=true",
 #    "traefik.http.routers.drone.rule=Host(`drone.apps.cyber.psych0si.is`)",
-    #"traefik.http.routers.gitea.service=api@internal",
+#"traefik.http.routers.gitea.service=api@internal",
 #    "traefik.http.routers.drone.entrypoints=http"
 #  ]
 #}

@@ -1,10 +1,10 @@
----
-kind: pipeline
 type: docker
+kind: pipeline
 name: default
 
 steps:
-- name: backend
-  image: bash
-  commands:
-  - echo Hello World
+- name: deploy
+  image: loq9/drone-nomad
+  settings:
+    addr: http://10.0.0.1:4646
+    template: bind.nomad
