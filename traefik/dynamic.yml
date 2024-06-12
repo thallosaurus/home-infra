@@ -1,0 +1,14 @@
+http:
+  # Add the router
+  routers:
+    drone:
+      service: drone
+      rule: Host(`drone.apps.cyber.psych0si.is`) && PathPrefix(`/`)
+
+  # Add the service
+  services:
+    drone:
+      loadBalancer:
+        servers:
+        - url: http://10.0.0.1:38259/
+        passHostHeader: true

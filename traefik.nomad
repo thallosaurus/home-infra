@@ -18,6 +18,27 @@ job "traefik" {
     }
 
     service {
+      name = "dashboard"
+      port = "dashboard"
+      tags = [
+        "traefik",
+        "traefik.enable=true",
+        "traefik.http.routers.traefik-dashboard.rule=Host(`traefik-dashboard.apps.cyber.psych0si.is`)",
+        "traefik.http.services.traefik-dashboard.loadbalancer.server.port=${NOMAD_PORT_dashboard}",
+      ]
+      #provider = "nomad"
+
+      check {
+        name     = "Minio Check"
+        #path     = "/dashboard/"
+        type     = "tcp"
+        #protocol = "http"
+        interval = "10s"
+        timeout  = "2s"
+      }
+    }
+
+    service {
       name = "traefik"
       port = "http"
     }
@@ -31,10 +52,10 @@ job "traefik" {
         args  = ["--configFile", "/local/Traefik.yml"]
       }
 
-      #template {
-      #  destination = "/local/dynamic.yml"
-      #  source      = "traefik/dynamic.yml"
-      #}
+      template {
+        destination = "/local/dynamic.yml"
+        data      = file("./traefik/dynamic.yml")
+      }
 
       template {
         destination = "/local/Traefik.yml"

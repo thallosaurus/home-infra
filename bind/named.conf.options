@@ -17,6 +17,7 @@ options {
 
 
         forwarders {
+            10.0.0.254;
             8.8.8.8;
         };
 
