@@ -25,5 +25,6 @@ jobs:
 #      - run: nomad run samba.nomad
 #      - run: nomad run traefik.nomad
 #      - run: nomad run cloudflared.nomad
+      - run: terraform init
       - run: terraform plan
       - run: terraform apply -auto-approve
