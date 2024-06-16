@@ -13,6 +13,8 @@ resource "docker_container" "dnsmasq" {
   }
 
   network_mode = "host"
+
+  # nomads privileged mode didnt work
   privileged = true
 
   #command = ["/entrypoint.sh", "-c", "/etc/kea/kea-dhcp4.conf"]

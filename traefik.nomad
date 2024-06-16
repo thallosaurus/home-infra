@@ -24,16 +24,14 @@ job "traefik" {
         "traefik",
         "traefik.enable=true",
         "traefik.http.routers.traefik-dashboard.rule=Host(`traefik-dashboard.apps.cyber.psych0si.is`)",
-        "traefik.http.routers.traefik-dashboard.service=traefik-dashboard",
-        "traefik.http.services.traefik-dashboard.loadbalancer.server.port=${NOMAD_PORT_dashboard}",
       ]
       #provider = "nomad"
 
       check {
-        name     = "Minio Check"
-        #path     = "/dashboard/"
-        type     = "tcp"
-        #protocol = "http"
+        name     = "Traefik Check"
+        path     = "/dashboard/"
+        type     = "http"
+        protocol = "http"
         interval = "10s"
         timeout  = "2s"
       }

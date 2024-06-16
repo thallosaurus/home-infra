@@ -16,7 +16,6 @@ job "gitea" {
         "traefik",
         "traefik.enable=true",
         "traefik.http.routers.gitea.rule=Host(`gitea.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
-        #"traefik.http.routers.gitea.service=api@internal",
         "traefik.http.routers.gitea.entrypoints=http",
       ]
       #provider = "nomad"
