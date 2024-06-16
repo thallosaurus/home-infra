@@ -1,4 +1,5 @@
 resource "docker_image" "kea-dhcp4" {
+  count = 0
   name = "smailkoz/kea-dhcp"
 }
 

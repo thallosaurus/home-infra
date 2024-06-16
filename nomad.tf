@@ -53,3 +53,11 @@ resource "nomad_job" "samba" {
     allow_fs = true
   }
 }
+
+resource "nomad_job" "dhcp" {
+  jobspec = file("${path.module}/dhcp.nomad")
+
+  hcl2 {
+    allow_fs = true
+  }
+}

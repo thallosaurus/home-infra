@@ -1,5 +1,5 @@
 job "dhcp" {
-  group "kea" {
+  group "dnsmasq" {
     count = 0
     constraint {
       attribute = "${node.unique.name}"
@@ -10,7 +10,7 @@ job "dhcp" {
       mode = "host"
     }
 
-    task "kea" {
+    task "dnsmasq" {
       driver = "docker"
       template {
         destination = "dhcp4.conf"
@@ -31,7 +31,7 @@ job "dhcp" {
         #  "-c", "/etc/kea/kea-dhcp4.conf"
         #]
 
-  privileged = true
+        privileged = true
       }
     }
   }
