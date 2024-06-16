@@ -12,8 +12,10 @@ jobs:
     steps:
       - name: Check out repository code 
         uses: actions/checkout@v4           
-      - name: Install Terraform
-        uses: little-core-labs/install-terraform@v2.0.0
+      - name: Setup Terraform
+        uses: autero1/action-terraform@v3
+        with:
+          terraform-version: 1.8.5
 #      - name: Setup Nomad
 #        uses: lucasmelin/setup-nomad@v2.0.0
 #      - run: nomad run bind.nomad
