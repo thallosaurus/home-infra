@@ -2,5 +2,4 @@
 .terraform/
 .terraform*
 *.tfstate
-cloudflared.nomad
 *.token

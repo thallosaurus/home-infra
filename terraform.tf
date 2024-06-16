@@ -28,9 +28,6 @@ provider "docker" {
 provider "consul" {
   address    = "10.0.0.1:8500"
   datacenter = "dc1"
-
-  # SecretID from the previous step
-  #token      = "YOUR_BOOTSTRAP_TOKEN_HERE"
 }
 
 provider "nomad" {
