@@ -1,0 +1,8 @@
+# My Infra
+
+### Needed Envs:
+
+`NOMAD_ADDR`
+`NOMAD_TOKEN`
+`VAULT_ADDR`
+`VAULT_TOKEN`

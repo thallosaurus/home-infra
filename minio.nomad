@@ -2,6 +2,7 @@ job "minio" {
   type = "service"
 
   group "minio" {
+    count = 0
     network {
       port "http" {
         to = "9000"
@@ -52,9 +53,23 @@ job "minio" {
       }
 
       env {
-        MINIO_ROOT_USER     = "akasha"
-        MINIO_ROOT_PASSWORD = "testtest123"
+        MINIO_ROOT_USER = "akasha"
+        #MINIO_ROOT_PASSWORD = "rootpassword"
       }
+
+      #  destination = "secrets/pw.env"
+      #  env         = true
+      #}
+
+      template {
+        destination = "${NOMAD_SECRETS_DIR}/env.vars"
+        env         = true
+        data        = <<EOF
+{{- with nomadVar "nomad/jobs/minio" -}}
+MINIO_ROOT_PASSWORD={{ .password }}
+{{- end -}}
+EOF
+     }
 
       config {
         image = "quay.io/minio/minio"

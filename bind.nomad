@@ -1,6 +1,11 @@
 job "dns" {
   type = "service"
 
+  update {
+    auto_revert  = true
+    max_parallel = 3
+  }
+
   group "bind" {
     constraint {
       attribute = "${node.unique.name}"

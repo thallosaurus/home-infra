@@ -14,3 +14,5 @@ s3       IN      CNAME       traefik.service.consul.
 drone       IN      CNAME       traefik.service.consul.
 traefik-dashboard       IN      CNAME       traefik.service.consul.
 nas       IN      CNAME       samba.service.consul.
+assistant       IN      CNAME       traefik.service.consul.
+swfs       IN      CNAME       traefik.service.consul.
