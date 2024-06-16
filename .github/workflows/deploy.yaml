@@ -6,7 +6,6 @@ env:
   NOMAD_ADDR: ${{ vars.NOMAD_ADDR }}
   NOMAD_TOKEN: ${{ vars.NOMAD_TOKEN }}
 
-
 jobs:
   deploy-nomad:
     runs-on: ubuntu-latest

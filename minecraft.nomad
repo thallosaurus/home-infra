@@ -32,7 +32,7 @@ job "minecraft" {
       driver = "docker"
 
       resources {
-        memory = 2048
+        memory = 1024
       }
 
       volume_mount {
