@@ -11,6 +11,9 @@ jobs:
       - name: Setup Nomad
         uses: lucasmelin/setup-nomad@v2.0.0
       - run: nomad run traefik.nomad
+        env:
+          NOMAD_ADDR: ${{ vars.NOMAD_ADDR }}
+          NOMAD_TOKEN: ${{ vars.NOMAD_TOKEN }}
 
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by Gitea!"
       - run: echo "🔎 The name of your branch is ${{ gitea.ref }} and your repository is ${{ gitea.repository }}."
