@@ -6,12 +6,8 @@ resource "nomad_job" "traefik" {
   }
 }
 
-resource "nomad_job" "bind" {
-  jobspec = file("${path.module}/bind.nomad")
-
-  hcl2 {
-    allow_fs = true
-  }
+data "nomad_job" "bind" {
+  job_id = "dns"
 }
 
 resource "nomad_job" "cloudflared" {

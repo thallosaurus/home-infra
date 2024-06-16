@@ -12,6 +12,11 @@ job "traefik" {
         static = "80"
       }
 
+      port "https" {
+        to     = "443"
+        static = "443"
+      }
+
       port "dashboard" {
         to = "8080"
       }
@@ -47,7 +52,7 @@ job "traefik" {
 
       config {
         image = "traefik:v3.0"
-        ports = ["http", "dashboard"]
+        ports = ["http", "https", "dashboard"]
         args  = ["--configFile", "/local/Traefik.yml"]
       }
 
