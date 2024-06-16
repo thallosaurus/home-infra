@@ -32,5 +32,5 @@ provider "consul" {
 
 provider "nomad" {
   address = "http://10.0.0.1:4646"
-  region  = "dc1"
+  region  = "global"
 }

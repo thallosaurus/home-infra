@@ -11,13 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code 
-        uses: actions/checkout@v4
-      - name: Setup Nomad
-        uses: lucasmelin/setup-nomad@v2.0.0
-      - run: nomad run bind.nomad
-      - run: nomad run gitea.nomad
-      - run: nomad run homeassistant.nomad
-      - run: nomad run minecraft.nomad
-      - run: nomad run samba.nomad
-      - run: nomad run traefik.nomad
-      - run: nomad run cloudflared.nomad
+        uses: actions/checkout@v4           
+      - name: Install Terraform
+        uses: little-core-labs/install-terraform@v2.0.0
+#      - name: Setup Nomad
+#        uses: lucasmelin/setup-nomad@v2.0.0
+#      - run: nomad run bind.nomad
+#      - run: nomad run gitea.nomad
+#      - run: nomad run homeassistant.nomad
+#      - run: nomad run minecraft.nomad
+#      - run: nomad run samba.nomad
+#      - run: nomad run traefik.nomad
+#      - run: nomad run cloudflared.nomad
+      - run: terraform plan
+      - run: terraform apply -auto-approve

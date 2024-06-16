@@ -36,42 +36,11 @@ job "fileserver" {
 
       template {
         destination = "smb.conf"
-        data        = <<EOH
-[global]
-    security = user
-    server min protocol = SMB2
-
-    # disable printing services
-    load printers = no
-    printing = bsd
-    printcap name = /dev/null
-    disable spoolss = yes
-
-[Samples]
-   path = /mnt/Samples
-   read only = No
-
-[Gameroms]
-   path = /mnt/Gameroms
-   read only = No
-
-[Music]
-   path = /mnt/Music
-   read only = No
-
-[Data]
-   path = /mnt/Data
-   read only = No
-
-[NetworkDocs]
-    path = /mnt/NetworkDocs
-    read only = No
-        EOH
+        data        = file("./samba/smb.conf")
       }
 
       env {
         USER = "user"
-        PASS = "user"
       }
 
       template {

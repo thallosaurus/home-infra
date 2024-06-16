@@ -6,6 +6,8 @@ resource "docker_container" "runner01" {
   name  = "act_runner"
   image = docker_image.act_runner.image_id
 
+  network_mode = "bridge"
+
   upload {
     file    = "/config.yaml"
     content = file("./runner/config.yaml")
