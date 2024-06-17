@@ -7,6 +7,11 @@ job "gitea" {
         to     = "3000"
         static = "3456"
       }
+
+      port "ssh" {
+        to = "22"
+        static = "2222"
+      }
     }
 
     service {
@@ -43,7 +48,6 @@ job "gitea" {
         destination = "local/app.ini"
         data        = <<EOH
 {{- with nomadVar "nomad/jobs/gitea" -}}
-PASS={{ .root_password }}
 APP_NAME = cyber.psych0si.is
 RUN_MODE = prod
 RUN_USER = git
@@ -61,10 +65,10 @@ TEMP_PATH = /data/gitea/uploads
 [server]
 APP_DATA_PATH = /data/gitea
 DOMAIN = gitea.apps.cyber.psych0si.is
-SSH_DOMAIN = gitea.apps.cyber.psych0si.is
+SSH_DOMAIN = ssh.git.cyber.psych0si.is
 HTTP_PORT = 3000
 ROOT_URL = http://gitea.apps.cyber.psych0si.is/
-DISABLE_SSH = false
+DISABLE_SSH = true
 SSH_PORT = 22
 SSH_LISTEN_PORT = 22
 LFS_START_SERVER = true
