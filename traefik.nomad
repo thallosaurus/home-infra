@@ -17,6 +17,11 @@ job "traefik" {
         static = "443"
       }
 
+      port "public" {
+        to = "8081"
+        static = "8081"
+      }
+
       port "dashboard" {
         to = "8080"
       }

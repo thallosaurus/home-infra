@@ -1,5 +1,5 @@
-name: Gitea Actions Demo
-run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀
+name: Deploy Config
+run-name: Deploy Nomad and Terraform Configs
 on: [push]
 
 env:

@@ -1,0 +1,135 @@
+job "monitor" {
+  group "prometheus" {
+    network {
+      dns {
+        servers = ["10.0.0.1"]
+      }
+      port "http" {
+        to = "9090"
+      }
+    }
+
+    service {
+      name = "prometheus"
+      port = "http"
+
+      tags = [
+        "traefik",
+        "traefik.enable=true",
+        "traefik.http.routers.prometheus.rule=Host(`prometheus.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+      ]
+    }
+
+
+    volume "pdata" {
+      type      = "host"
+      read_only = false
+      source    = "prometheus-data"
+    }
+    task "prometheus" {
+      driver = "docker"
+
+      template {
+        destination = "local/prometheus.yml"
+        data        = <<EOH
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'codelab-monitor'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  - job_name: 'nomad_metrics'
+
+    consul_sd_configs:
+    - server: '10.0.0.1:8500'
+      services: ['nomad-client', 'nomad']
+    relabel_configs:
+    - source_labels: ['__meta_consul_tags']
+      regex: '(.*)http(.*)'
+      action: keep
+
+    scrape_interval: 5s
+    metrics_path: /v1/metrics
+
+    params:
+      format: ['prometheus']
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name : 'traefik'
+    static_configs:
+      - targets: ['traefik-dashboard.apps.cyber.psych0si.is']
+        EOH
+      }
+
+      config {
+        mount {
+          type   = "bind"
+          source = "local/prometheus.yml"
+          target = "/etc/prometheus/prometheus.yml"
+        }
+
+        #mount {
+        #  type = "volume"
+        #  target = "/prometheus"
+        #  source = "pdata"
+        #}
+        image = "prom/prometheus"
+        ports = ["http"]
+        args  = ["--config.file=/etc/prometheus/prometheus.yml"]
+      }
+    }
+  }
+
+  group "grafana" {
+    network {
+      dns {
+        servers = ["10.0.0.1"]
+      }
+      port "http" {
+        to = "3000"
+      }
+    }
+
+    service {
+      name = "grafana"
+      port = "http"
+
+      tags = [
+        "traefik",
+        "traefik.enable=true",
+        "traefik.http.routers.grafana.rule=Host(`grafana.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+      ]
+    }
+
+    volume "gdata" {
+      type      = "host"
+      read_only = false
+      source    = "grafana-data"
+    }
+
+    task "grafana" {
+      driver = "docker"
+
+      config {
+        #mount {
+        #  type   = "volume"
+        #  target = "/var/lib/grafana"
+        #  source = "gdata"
+        #}
+        image = "grafana/grafana"
+        ports = ["http"]
+      }
+    }
+  }
+}

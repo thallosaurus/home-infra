@@ -9,6 +9,9 @@ entryPoints:
   https:
     address: ":443"
 
+  public:
+    address: ":8081"
+
 log:
   level: DEBUG
 
@@ -24,3 +27,6 @@ providers:
     exposedByDefault: false
 
 accessLog: {}
+
+metrics:
+  prometheus: {}

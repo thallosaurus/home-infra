@@ -15,7 +15,7 @@ resource "docker_container" "runner01" {
 
   env = [
     "CONFIG_FILE=/config.yaml",
-    "GITEA_INSTANCE_URL=http://git.cyber.psych0si.is",
+    "GITEA_INSTANCE_URL=https://git.cyber.psych0si.is",
     "GITEA_RUNNER_NAME=test",
     "GITEA_RUNNER_REGISTRATION_TOKEN=${data.nomad_variable.runner_token.items["gitea_token01"]}"
   ]
