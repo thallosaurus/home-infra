@@ -36,11 +36,42 @@ job "homeassistant" {
     task "homeassistant_core" {
       driver = "docker"
 
+      template {
+        destination = "local/configuration.yaml"
+        data        = <<EOH
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 10.0.0.1
+
+prometheus:
+  requires_auth: false
+
+homekit:
+  - name: HASS Bridge
+    advertise_ip: "{{ env "NOMAD_IP_homekit_bridge" }}"
+    port: {{ env "NOMAD_PORT_homekit_bridge" }}
+        EOH
+      }
+
       volume_mount {
         volume      = "data"
         destination = "/config"
         read_only   = false
       }
+
+
 
       config {
         hostname     = "hostname"
@@ -56,6 +87,12 @@ job "homeassistant" {
         port_map {
           homeassistant_core = 8123
         }
+
+        mount {
+          type   = "bind"
+          source = "local/configuration.yaml"
+          target = "/config/configuration.yaml"
+        }
       }
       resources {
         cpu    = 800 # 500 MHz
@@ -63,6 +100,8 @@ job "homeassistant" {
         network {
           mbits = 300
           port "homeassistant_core" { static = 8123 }
+          port "avahi" { static = 5353 }
+          port "homekit_bridge" {}
         }
       }
       service {

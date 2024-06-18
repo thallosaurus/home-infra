@@ -19,3 +19,4 @@ swfs       IN      CNAME       traefik.service.consul.
 headscale       IN      CNAME       traefik.service.consul.
 prometheus       IN      CNAME       traefik.service.consul.
 grafana       IN      CNAME       traefik.service.consul.
+influxdb       IN      CNAME       traefik.service.consul.

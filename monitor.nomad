@@ -21,11 +21,20 @@ job "monitor" {
     }
 
 
+    #volume "pdata" {
+    #  type      = "host"
+    #  read_only = false
+    #  source    = "prometheus-data"
+    #}
+
     volume "pdata" {
-      type      = "host"
-      read_only = false
-      source    = "prometheus-data"
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_prometheus"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
     }
+
     task "prometheus" {
       driver = "docker"
 
@@ -69,8 +78,34 @@ scrape_configs:
   - job_name : 'traefik'
     static_configs:
       - targets: ['traefik-dashboard.apps.cyber.psych0si.is']
+
+  # Example Prometheus scrape_configs entry
+  - job_name: "hoass"
+    scrape_interval: 60s
+    metrics_path: /api/prometheus
+
+    # Legacy api password
+    #params:
+    #  api_password: ['PASSWORD']
+    
+    authorization:
+    # Long-Lived Access Token
+    {{- with nomadVar "nomad/jobs/monitor" -}}
+      credentials: "{{ .hoass_prom_key }}"
+    {{- end -}}
+
+    scheme: http
+    static_configs:
+      - targets: ['assistant.apps.cyber.psych0si.is']
         EOH
       }
+
+      volume_mount {
+        volume      = "pdata"
+        destination = "/prometheus"
+        read_only   = false
+      }
+      user = "root"
 
       config {
         mount {
@@ -79,11 +114,13 @@ scrape_configs:
           target = "/etc/prometheus/prometheus.yml"
         }
 
+
         #mount {
         #  type = "volume"
         #  target = "/prometheus"
         #  source = "pdata"
         #}
+
         image = "prom/prometheus"
         ports = ["http"]
         args  = ["--config.file=/etc/prometheus/prometheus.yml"]
@@ -112,24 +149,88 @@ scrape_configs:
       ]
     }
 
+    #    volume "gdata" {
+    #      type      = "host"
+    #      read_only = false
+    #      source    = "grafana-data"
+    #    }
     volume "gdata" {
-      type      = "host"
-      read_only = false
-      source    = "grafana-data"
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_grafana"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
     }
 
     task "grafana" {
       driver = "docker"
+      user   = "root"
 
+      volume_mount {
+        volume      = "gdata"
+        destination = "/var/lib/grafana"
+        read_only   = false
+      }
       config {
         #mount {
         #  type   = "volume"
         #  target = "/var/lib/grafana"
         #  source = "gdata"
         #}
+
+
         image = "grafana/grafana"
         ports = ["http"]
       }
     }
   }
+
+  group "influxdb" {
+    network {
+      port "http" {
+        to = "8086"
+      }
+    }
+
+    volume "influx-data" {
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_influxdb"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
+    }
+
+    task "influxdb" {
+      driver = "docker"
+      volume_mount {
+        volume      = "influx-data"
+        destination = "/var/lib/influxdb2"
+        read_only   = false
+      }
+      config {
+        image = "influxdb:2"
+        ports = ["http"]
+      }
+
+      service {
+        name = "influxdb"
+        port = "http"
+
+        tags = [
+          "traefik",
+          "traefik.enable=true",
+          "traefik.http.routers.influxdb.rule=Host(`influxdb.apps.cyber.psych0si.is`) && PathPrefix(`/`)"
+        ]
+
+        check {
+          name     = "alive"
+          type     = "tcp"
+          interval = "10s"
+          timeout  = "2s"
+        }
+      }
+
+    }
+  }
+
 }

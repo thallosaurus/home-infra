@@ -1,10 +1,13 @@
 job "cloudflare" {
   group "cld" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "snappy"
+    }
     network {
-      mode = "host"
       dns {
         servers = [
-          "8.8.8.8"
+          "10.0.0.1"
         ]
       }
     }

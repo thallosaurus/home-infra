@@ -73,6 +73,7 @@ EOF
   }
 
   group "minio" {
+    count = 0
     network {
       port "http" {
         to = "9000"
@@ -113,9 +114,9 @@ EOF
         "traefik.http.services.minio-s3.loadbalancer.server.port=${NOMAD_PORT_http}",
       ]
       check {
-        name     = "Minio Dashboard Check"
+        name = "Minio Dashboard Check"
         #path     = "/"
-        type     = "tcp"
+        type = "tcp"
         #protocol = "http"
         interval = "10s"
         timeout  = "2s"
@@ -157,6 +158,58 @@ EOF
         args  = ["server", "/data", "--console-address", ":${NOMAD_PORT_console}"]
       }
 
+    }
+  }
+
+  group "nfs" {
+    network {
+      port "nfs" {
+        static = "2049"
+        to     = "2049"
+      }
+      port "rpc" {
+        static = "111"
+        to     = "111"
+      }
+    }
+
+    volume "fs" {
+      type      = "host"
+      read_only = false
+      source    = "samba-fs"
+    }
+
+    task "nfs" {
+      driver = "docker"
+
+      template {
+        destination = "local/exports"
+        data        = <<EOH
+/mnt/nfs/grafana  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/influxdb  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/prometheus  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+        EOH
+      }
+
+      volume_mount {
+        volume      = "fs"
+        destination = "/mnt"
+        read_only   = false
+      }
+
+
+      config {
+        privileged = true
+        image      = "erichough/nfs-server"
+        ports      = ["nfs", "rpc"]
+        network_mode = "host"
+
+        mount {
+          type   = "bind"
+          target = "/etc/exports"
+          source = "local/exports"
+        }
+      }
     }
   }
 }
