@@ -188,6 +188,8 @@ EOF
 /mnt/nfs/grafana  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/influxdb  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/prometheus  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/homeassistant  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/gitea  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
         EOH
       }
 

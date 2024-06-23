@@ -20,13 +20,6 @@ job "monitor" {
       ]
     }
 
-
-    #volume "pdata" {
-    #  type      = "host"
-    #  read_only = false
-    #  source    = "prometheus-data"
-    #}
-
     volume "pdata" {
       type            = "csi"
       read_only       = false
@@ -114,13 +107,6 @@ scrape_configs:
           target = "/etc/prometheus/prometheus.yml"
         }
 
-
-        #mount {
-        #  type = "volume"
-        #  target = "/prometheus"
-        #  source = "pdata"
-        #}
-
         image = "prom/prometheus"
         ports = ["http"]
         args  = ["--config.file=/etc/prometheus/prometheus.yml"]
@@ -149,11 +135,6 @@ scrape_configs:
       ]
     }
 
-    #    volume "gdata" {
-    #      type      = "host"
-    #      read_only = false
-    #      source    = "grafana-data"
-    #    }
     volume "gdata" {
       type            = "csi"
       read_only       = false
@@ -172,13 +153,6 @@ scrape_configs:
         read_only   = false
       }
       config {
-        #mount {
-        #  type   = "volume"
-        #  target = "/var/lib/grafana"
-        #  source = "gdata"
-        #}
-
-
         image = "grafana/grafana"
         ports = ["http"]
       }

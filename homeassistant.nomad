@@ -33,6 +33,14 @@ job "homeassistant" {
       source    = "homeassistant-data"
     }
 
+    volume "hoass-data" {
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_hoass"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
+    }
+
     task "homeassistant_core" {
       driver = "docker"
 
@@ -66,7 +74,7 @@ homekit:
       }
 
       volume_mount {
-        volume      = "data"
+        volume      = "hoass-data"
         destination = "/config"
         read_only   = false
       }
@@ -79,11 +87,7 @@ homekit:
         image        = "homeassistant/home-assistant:stable"
         network_mode = "host"
         privileged   = true
-        volumes = [
-          #            "/nfs/home_assistant/config:/config",
-          #            "/etc/localtime:/etc/localtime:ro"
-          #"/var/dbus:/var/dbus"
-        ]
+        volumes = []
         port_map {
           homeassistant_core = 8123
         }

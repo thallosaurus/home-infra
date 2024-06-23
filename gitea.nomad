@@ -9,7 +9,7 @@ job "gitea" {
       }
 
       port "ssh" {
-        to = "22"
+        to     = "22"
         static = "2222"
       }
     }
@@ -36,9 +36,11 @@ job "gitea" {
     }
 
     volume "data" {
-      type      = "host"
-      read_only = false
-      source    = "gitea-data"
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_gitea"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
     }
 
     task "gitea" {
@@ -160,6 +162,7 @@ JWT_SECRET = {{ .oauth2_jwt_secret }}
       config {
         image = "gitea/gitea"
         ports = ["http"]
+        privileged = true
         mount {
           type     = "bind"
           source   = "local/app.ini"

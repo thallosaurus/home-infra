@@ -17,6 +17,7 @@ jobs:
       - run: nomad volume register volumes/nfs-grafana.hcl
       - run: nomad volume register volumes/nfs-influxdb.hcl
       - run: nomad volume register volumes/nfs-prometheus.hcl
+      - run: nomad volume register volumes/nfs-hoass.hcl
 #      - run: nomad run bind.nomad
 #      - run: nomad run gitea.nomad
 #      - run: nomad run homeassistant.nomad

@@ -1,7 +1,7 @@
 job "router" {
   group "opnsense" {
 
-    count = 0
+    #count = 0
 
 
     task "opnsense" {
