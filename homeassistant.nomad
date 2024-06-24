@@ -27,11 +27,11 @@ job "homeassistant" {
       mode     = "fail"
     }
 
-    volume "data" {
-      type      = "host"
-      read_only = false
-      source    = "homeassistant-data"
-    }
+    #volume "data" {
+    #  type      = "host"
+    #  read_only = false
+    #  source    = "homeassistant-data"
+    #}
 
     volume "hoass-data" {
       type            = "csi"
@@ -87,7 +87,7 @@ homekit:
         image        = "homeassistant/home-assistant:stable"
         network_mode = "host"
         privileged   = true
-        volumes = []
+        volumes      = []
         port_map {
           homeassistant_core = 8123
         }
@@ -117,7 +117,8 @@ homekit:
           "homeautomation",
           "traefik",
           "traefik.enable=true",
-          "traefik.http.routers.hoass.rule=Host(`assistant.apps.cyber.psych0si.is`) && PathPrefix(`/`)"
+          "traefik.http.routers.hoass.rule=Host(`assistant.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+          "traefik.http.routers.hoass.entrypoints=http"
         ]
 
         check {

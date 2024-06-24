@@ -75,7 +75,7 @@ SSH_PORT = 22
 SSH_LISTEN_PORT = 22
 LFS_START_SERVER = true
 LFS_JWT_SECRET = {{ .lfs_jwt_secret }}
-OFFLINE_MODE = true
+OFFLINE_MODE = false
 
 [database]
 PATH = /data/gitea/gitea.db
@@ -158,17 +158,38 @@ JWT_SECRET = {{ .oauth2_jwt_secret }}
         read_only   = false
       }
 
+      template {
+        data = <<EOH
+GITEA_APP_NAME=cyberpsych0siis
+GITEA_ADMIN_USER=akasha
+{{- with nomadVar "nomad/jobs" -}}
+GITEA_ADMIN_PASSWORD={{ .root_password }}
+{{- end -}}
+
+{{- with nomadVar "nomad/jobs/gitea" -}}
+GITEA_DATABASE_PASSWORD={{ .mysql_password }}
+{{- end -}}
+GITEA_DOMAIN=git.cyber.psych0si.is
+GITEA_ROOT_URL=https://git.cyber.psych0si.is
+GITEA_DATABASE_TYPE=mysql
+GITEA_DATABASE_HOST=mysql.service.consul
+GITEA_DATABASE_USERNAME=gitea
+GITEA_DATABASE_PORT_NUMBER=3306
+        EOH
+        destination = "secret/secret.env"
+        env = true
+      }
 
       config {
-        image = "gitea/gitea"
+        image = "bitnami/gitea"
         ports = ["http"]
         privileged = true
-        mount {
-          type     = "bind"
-          source   = "local/app.ini"
-          target   = "/data/gitea/conf/app.ini"
-          readonly = true
-        }
+#        mount {
+#          type     = "bind"
+#          source   = "local/app.ini"
+#          target   = "/data/gitea/conf/app.ini"
+#          readonly = true
+#        }
       }
     }
   }

@@ -17,6 +17,7 @@ job "monitor" {
         "traefik",
         "traefik.enable=true",
         "traefik.http.routers.prometheus.rule=Host(`prometheus.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+        "traefik.http.routers.prometheus.entrypoints=http"
       ]
     }
 
@@ -132,6 +133,7 @@ scrape_configs:
         "traefik",
         "traefik.enable=true",
         "traefik.http.routers.grafana.rule=Host(`grafana.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+        "traefik.http.routers.grafana.entrypoints=http"
       ]
     }
 
@@ -193,7 +195,8 @@ scrape_configs:
         tags = [
           "traefik",
           "traefik.enable=true",
-          "traefik.http.routers.influxdb.rule=Host(`influxdb.apps.cyber.psych0si.is`) && PathPrefix(`/`)"
+          "traefik.http.routers.influxdb.rule=Host(`influxdb.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+          "traefik.http.routers.influxdb.entrypoints=http"
         ]
 
         check {

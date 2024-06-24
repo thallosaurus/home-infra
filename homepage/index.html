@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        async function getFromTraefik() {
+            const url = "http://traefik-dashboard.apps.cyber.psych0si.is/api/http/routers";
+
+            const u = await fetch(url)
+            const data = await u.json();
+
+            console.log(data);
+        }
+
+        window.onload = () => {
+            getFromTraefik();
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

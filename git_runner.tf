@@ -3,6 +3,7 @@ resource "docker_image" "act_runner" {
 }
 
 resource "docker_container" "runner01" {
+  count = 0
   name  = "act_runner"
   image = docker_image.act_runner.image_id
 

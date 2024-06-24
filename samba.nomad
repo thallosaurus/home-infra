@@ -40,7 +40,7 @@ job "fileserver" {
       }
 
       env {
-        USER = "user"
+        USER = "akasha"
       }
 
       template {
@@ -190,6 +190,8 @@ EOF
 /mnt/nfs/prometheus  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/homeassistant  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/gitea  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/mysql  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/gitness  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
         EOH
       }
 
