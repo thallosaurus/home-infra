@@ -12,12 +12,12 @@ job "databases" {
       name = "mysql"
       port = "mysql"
 
-      check {
-        name     = "MySQL Port Check"
-        type     = "tcp"
-        interval = "10s"
-        timeout  = "2s"
-      }
+      #check {
+      #  name     = "MySQL Port Check"
+      #  type     = "tcp"
+      #  interval = "10s"
+      #  timeout  = "2s"
+      #}
     }
 
     volume "data" {

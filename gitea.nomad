@@ -32,7 +32,8 @@ job "gitea" {
 
       check {
         name     = "Gitea Frontend Check"
-        path     = "/api/healthz"
+        #path     = "/api/healthz"
+        path     = "/"
         type     = "http"
         protocol = "http"
         interval = "10s"
