@@ -11,7 +11,7 @@ job "vpn" {
       port = "http"
       tags = [
         "traefik",
-        "traefik.enable=true",
+        #"traefik.enable=true",
         "traefik.http.routers.headscale.rule=Host(`headscale.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
         "traefik.http.routers.headscale.entrypoints=http,public",
       ]

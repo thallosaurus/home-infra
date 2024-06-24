@@ -7,7 +7,7 @@ job "gitness" {
     }
 
     service {
-      name = "gitea"
+      name = "gitness"
       port = "http"
       tags = [
         "traefik",
@@ -45,6 +45,7 @@ job "gitness" {
 
       env {
         GITNESS_URL_BASE = "http://gitness.apps.cyber.psych0si.is"
+        GITNESS_URL_CONTAINER = "http://gitness.apps.cyber.psych0si.is"
         GITNESS_USER_SIGNUP_ENABLED = "false"
       }
       config {
