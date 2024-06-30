@@ -1,0 +1,40 @@
+{
+    "identities": [
+        {
+            "name": "anonymous",
+            "actions": [
+                "Read:docs"
+            ]
+        },
+        {
+            "name": "root",
+            "credentials": [
+
+{{- with nomadVar "nomad/jobs" -}}
+{
+    "accessKey": "root",
+    "secretKey": "{{ .root_password }}"
+}
+{{- end -}}
+            ],
+            "actions": [
+                "Read",
+                "Write",
+                "List",
+                "Tagging",
+                "Admin"
+            ]
+        },
+        {
+            "name": "documentserver",
+            "credentials": [{
+                "accessKey": "docs",
+                "secretKey": "docs"
+            }],
+            "actions": [
+                "Read:docs",
+                "List:docs"
+            ]
+        }
+    ]
+}

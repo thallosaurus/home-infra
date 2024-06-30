@@ -1,5 +1,6 @@
 job "vpn" {
   group "connector" {
+    count = 0
     network {
       port "http" {
         to = "8080"
@@ -37,6 +38,16 @@ job "vpn" {
         }
       }
 
+    }
+  }
+
+  group "tailscale" {
+    task "ts" {
+      driver = "docker"
+
+      config {
+        image = "tailscale/tailscale:latest"
+      }
     }
   }
 }

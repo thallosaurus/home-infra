@@ -72,68 +72,85 @@ EOF
     }
   }
 
-  group "minio" {
-    count = 1
+  group "seaweedfs" {
     network {
-      port "api" {
-        #to = "9000"
+      port "http" {
+        to = "8333"
       }
 
-      port "console" {
+      port "filer" {
+        to = "8888"
       }
-    }
 
-    service {
-      name = "minio-api"
-      port = "api"
-      tags = [
-        "traefik",
-        "traefik.enable=true",
-        "traefik.http.routers.minio-s3.rule=Host(`s3.apps.cyber.psych0si.is`) || HostRegexp(`^.+\\.s3\\.apps\\.cyber\\.psych0si\\.is$`)",
-        "traefik.http.routers.minio-s3.entrypoints=http",
-        #"traefik.http.routers.minio-s3.service=minio-s3",
-        #"traefik.http.services.minio-s3.loadbalancer.server.port=${NOMAD_PORT_api}",
-      ]
+      port "s3" {
+      }
 
-      check {
-        name     = "Minio Check"
-        path     = "/minio/health/live"
-        type     = "http"
-        protocol = "http"
-        interval = "10s"
-        timeout  = "2s"
+      port "webdav" {
+
       }
     }
 
     service {
-      name = "minio-console"
-      port = "console"
+      name = "seaweedfs-s3"
+      port = "s3"
       tags = [
         "traefik",
         "traefik.enable=true",
-        "traefik.http.routers.minio-console.rule=Host(`minio.apps.cyber.psych0si.is`)",
-        "traefik.http.routers.minio-console.entrypoints=http",
-        #"traefik.http.routers.minio-console.service=minio-console",
-        #"traefik.http.services.minio-console.loadbalancer.server.port=${NOMAD_PORT_console}"
+        "traefik.http.routers.sws3.rule=Host(`s3.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+        "traefik.http.routers.sws3.entrypoints=http",
       ]
-      check {
-        name = "Minio Dashboard Check"
-        #path     = "/"
-        type = "tcp"
-        #protocol = "http"
-        interval = "10s"
-        timeout  = "2s"
-      }
+      #provider = "nomad"
+
+      #  check {
+      #    name     = "Gitea Frontend Check"
+      #    #path     = "/api/healthz"
+      #    path     = "/"
+      #    type     = "http"
+      #    protocol = "http"
+      #    interval = "10s"
+      #    timeout  = "2s"
+      #  }
+    }
+
+    service {
+      name = "webdav"
+      port = "webdav"
+
+      tags = [
+        "traefik",
+        "traefik.enable=true",
+        "traefik.http.routers.swwebdav.rule=Host(`webdav.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+        "traefik.http.routers.swwebdav.entrypoints=http",
+      ]
+    }
+
+    service {
+      name = "filer"
+      port = "filer"
+
+      tags = [
+        "traefik",
+        "traefik.enable=true",
+        "traefik.http.routers.swfiler.rule=Host(`filer.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
+        "traefik.http.routers.swfiler.entrypoints=http",
+      ]
     }
 
     volume "data" {
-      type      = "host"
-      read_only = false
-      source    = "minio-data"
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_seaweedfs"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
     }
 
-    task "minio" {
+
+    task "seaweedfs" {
       driver = "docker"
+      template {
+        destination = "local/config.json"
+        data        = file("s3/config.json")
+      }
 
       volume_mount {
         volume      = "data"
@@ -141,26 +158,17 @@ EOF
         read_only   = false
       }
 
-      env {
-        MINIO_ROOT_USER = "akasha"
-      }
-
-      template {
-        destination = "${NOMAD_SECRETS_DIR}/env.vars"
-        env         = true
-        data        = <<EOF
-{{- with nomadVar "nomad/jobs" -}}
-MINIO_ROOT_PASSWORD={{ .root_password }}
-{{- end -}}
-EOF
-      }
-
       config {
-        image = "quay.io/minio/minio"
-        ports = ["api", "console"]
-        args  = ["server", "/data", "--console-address", ":${NOMAD_PORT_console}", "--address", ":${NOMAD_PORT_api}"]
-      }
+        image = "chrislusf/seaweedfs"
+        args  = ["server", "-s3", "-s3.port=${NOMAD_PORT_s3}", "-s3.config=/config.json", "-dir=/data", "-filer=true", "-webdav", "-webdav.port=${NOMAD_PORT_webdav}"]
+        ports = ["http", "s3", "webdav", "filer"]
 
+        mount {
+          type   = "bind"
+          target = "/config.json"
+          source = "local/config.json"
+        }
+      }
     }
   }
 
@@ -195,6 +203,7 @@ EOF
 /mnt/nfs/gitea  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/mysql  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/gitness  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/seaweedfs  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
         EOH
       }
 

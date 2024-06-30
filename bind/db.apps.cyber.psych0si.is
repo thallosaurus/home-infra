@@ -23,3 +23,5 @@ grafana       IN      CNAME       traefik.service.consul.
 influxdb       IN      CNAME       traefik.service.consul.
 pma       IN      CNAME       traefik.service.consul.
 freepbx       IN      CNAME       traefik.service.consul.
+webdav       IN      CNAME       traefik.service.consul.
+filer       IN      CNAME       traefik.service.consul.

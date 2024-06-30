@@ -33,7 +33,7 @@ job "gitea" {
       #provider = "nomad"
 
       check {
-        name     = "Gitea Frontend Check"
+        name = "Gitea Frontend Check"
         #path     = "/api/healthz"
         path     = "/"
         type     = "http"
@@ -53,6 +53,10 @@ job "gitea" {
 
     task "gitea" {
       driver = "docker"
+
+      resources {
+        memory = 250
+      }
 
       volume_mount {
         volume      = "data"
