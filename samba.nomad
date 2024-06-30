@@ -73,24 +73,26 @@ EOF
   }
 
   group "minio" {
-    count = 0
+    count = 1
     network {
-      port "http" {
-        to = "9000"
+      port "api" {
+        #to = "9000"
       }
 
-      port "console" {}
+      port "console" {
+      }
     }
 
     service {
-      name = "minio"
-      port = "http"
+      name = "minio-api"
+      port = "api"
       tags = [
         "traefik",
         "traefik.enable=true",
-        "traefik.http.routers.minio-console.rule=Host(`minio.apps.cyber.psych0si.is`)",
-        "traefik.http.routers.minio-console.service=minio-console",
-        "traefik.http.services.minio-console.loadbalancer.server.port=${NOMAD_PORT_console}"
+        "traefik.http.routers.minio-s3.rule=Host(`s3.apps.cyber.psych0si.is`) || HostRegexp(`^.+\\.s3\\.apps\\.cyber\\.psych0si\\.is$`)",
+        "traefik.http.routers.minio-s3.entrypoints=http",
+        #"traefik.http.routers.minio-s3.service=minio-s3",
+        #"traefik.http.services.minio-s3.loadbalancer.server.port=${NOMAD_PORT_api}",
       ]
 
       check {
@@ -104,14 +106,15 @@ EOF
     }
 
     service {
-      name = "minio-dashboard"
+      name = "minio-console"
       port = "console"
       tags = [
         "traefik",
         "traefik.enable=true",
-        "traefik.http.routers.minio-s3.rule=Host(`*.s3.apps.cyber.psych0si.is`)",
-        "traefik.http.routers.minio-s3.service=minio-s3",
-        "traefik.http.services.minio-s3.loadbalancer.server.port=${NOMAD_PORT_http}",
+        "traefik.http.routers.minio-console.rule=Host(`minio.apps.cyber.psych0si.is`)",
+        "traefik.http.routers.minio-console.entrypoints=http",
+        #"traefik.http.routers.minio-console.service=minio-console",
+        #"traefik.http.services.minio-console.loadbalancer.server.port=${NOMAD_PORT_console}"
       ]
       check {
         name = "Minio Dashboard Check"
@@ -154,8 +157,8 @@ EOF
 
       config {
         image = "quay.io/minio/minio"
-        ports = ["http", "console"]
-        args  = ["server", "/data", "--console-address", ":${NOMAD_PORT_console}"]
+        ports = ["api", "console"]
+        args  = ["server", "/data", "--console-address", ":${NOMAD_PORT_console}", "--address", ":${NOMAD_PORT_api}"]
       }
 
     }
@@ -203,9 +206,9 @@ EOF
 
 
       config {
-        privileged = true
-        image      = "erichough/nfs-server"
-        ports      = ["nfs", "rpc"]
+        privileged   = true
+        image        = "erichough/nfs-server"
+        ports        = ["nfs", "rpc"]
         network_mode = "host"
 
         mount {

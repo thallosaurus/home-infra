@@ -11,6 +11,7 @@ ns1       IN      A       10.0.0.1
 gitea       IN      CNAME       traefik.service.consul.
 minio       IN      CNAME       traefik.service.consul.
 s3       IN      CNAME       traefik.service.consul.
+*.s3       IN      CNAME       s3
 drone       IN      CNAME       traefik.service.consul.
 traefik-dashboard       IN      CNAME       traefik.service.consul.
 nas       IN      CNAME       samba.service.consul.
@@ -21,4 +22,4 @@ prometheus       IN      CNAME       traefik.service.consul.
 grafana       IN      CNAME       traefik.service.consul.
 influxdb       IN      CNAME       traefik.service.consul.
 pma       IN      CNAME       traefik.service.consul.
-gitness       IN      CNAME       traefik.service.consul.
+freepbx       IN      CNAME       traefik.service.consul.

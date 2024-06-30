@@ -5,7 +5,9 @@ job "gitea" {
     network {
       dns {
         servers = [
-          "10.0.0.1"
+          "10.0.0.1",
+          "10.0.0.254",
+          "8.8.8.8",
         ]
       }
       port "http" {
