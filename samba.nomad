@@ -149,7 +149,8 @@ EOF
 
       config {
         image = "chrislusf/seaweedfs"
-        args  = ["server", "-s3", "-s3.port=${NOMAD_PORT_s3}", "-s3.config=/config.json", "-dir=/data", "-filer=true", "-webdav", "-webdav.port=${NOMAD_PORT_webdav}"]
+        args  = ["server", "-s3", "-s3.port=${NOMAD_PORT_s3}", "-s3.config=/config.json", "-dir=/data", "-filer=true"]
+        //, "-webdav", "-webdav.port=${NOMAD_PORT_webdav}"]
         ports = ["http", "s3", "webdav", "filer"]
 
         mount {
@@ -157,6 +158,73 @@ EOF
           target = "/config.json"
           source = "local/config.json"
         }
+      }
+    }
+  }
+
+  group "webdav" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "snappy"
+    }
+    network {
+      port "webdav" {
+        to     = "80"
+        static = "30303"
+      }
+    }
+
+    #    service {
+    #      name = "webdav"
+    #      port = "webdav"
+
+    #      tags = [
+    #        "traefik",
+    #        "traefik.enable=true",
+    #        "traefik.http.routers.webdav.rule=Host(`webdav.apps.cyber.psych0si.is`) && PathPrefix(`/`)",#
+    #        "traefik.http.routers.webdav.entrypoints=http",
+    #      ]
+    #    }
+
+    volume "keepass-store" {
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_keepass_store"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
+    }
+
+    task "webdav" {
+      driver = "docker"
+      env {
+        AUTH_TYPE = "Digest"
+        USERNAME  = "rillo"
+      }
+
+      volume_mount {
+        volume      = "keepass-store"
+        destination = "/var/lib/dav"
+        read_only   = false
+      }
+
+      template {
+        destination = "${NOMAD_SECRETS_DIR}/env.vars"
+        env         = true
+        data        = <<EOF
+{{- with nomadVar "nomad/jobs" -}}
+PASSWORD={{ .root_password }}
+{{- end -}}
+EOF
+      }
+
+      config {
+        //docker run --restart always -v /srv/dav:/var/lib/dav \
+        //-e AUTH_TYPE=Digest -e USERNAME=alice -e PASSWORD=secret1234 \
+        //--publish 80:80 -d bytemark/webdav
+
+        image = "bytemark/webdav"
+        ports = ["webdav"]
+
       }
     }
   }
@@ -193,6 +261,7 @@ EOF
 /mnt/nfs/mysql  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/gitness  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/seaweedfs  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/keepass  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
         EOH
       }
 
