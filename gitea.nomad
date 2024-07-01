@@ -12,12 +12,12 @@ job "gitea" {
       }
       port "http" {
         to     = "3000"
-        static = "3456"
+        #static = "3456"
       }
 
       port "ssh" {
         to     = "22"
-        static = "2222"
+        #static = "2222"
       }
     }
 
@@ -68,12 +68,6 @@ job "gitea" {
         image      = "gitea/gitea"
         ports      = ["http"]
         privileged = true
-        #        mount {
-        #          type     = "bind"
-        #          source   = "local/app.ini"
-        #          target   = "/data/gitea/conf/app.ini"
-        #          readonly = true
-        #        }
       }
     }
 

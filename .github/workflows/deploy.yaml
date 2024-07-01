@@ -12,12 +12,16 @@ jobs:
     steps:
       - name: Check out repository code 
         uses: actions/checkout@v4
-      - name: Deploy ACL
-        uses: tailscale/gitops-acl-action@v1
+      - name: Tailscale
+        uses: tailscale/github-action@v2
         with:
-          api-key: ${{ secrets.TS_API_KEY }}
-          tailnet: ${{ secrets.TS_TAILNET }}
-          action: apply
+          authkey: ${{ secrets.TS_AUTHKEY }}
+#      - name: Deploy ACL
+#        uses: tailscale/gitops-acl-action@v1
+#        with:
+#          api-key: ${{ secrets.TS_API_KEY }}
+#          tailnet: ${{ secrets.TS_TAILNET }}
+#          action: apply
       - name: Setup Nomad
         uses: lucasmelin/setup-nomad@v2.0.0
       - run: nomad volume register volumes/nfs-gitea.hcl
