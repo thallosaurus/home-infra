@@ -1,5 +1,4 @@
-name: Deploy Config
-run-name: Deploy Nomad and Terraform Configs
+name: Deploy Infra Config
 on: [push]
 
 env:
