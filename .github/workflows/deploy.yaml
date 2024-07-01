@@ -16,7 +16,7 @@ jobs:
         uses: tailscale/gitops-acl-action@v1
         with:
           api-key: ${{ secrets.TS_API_KEY }}
-      #    tailnet: ${{ secrets.TS_TAILNET }}
+          tailnet: ${{ secrets.TS_TAILNET }}
           action: apply
       - name: Setup Nomad
         uses: lucasmelin/setup-nomad@v2.0.0
