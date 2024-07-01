@@ -3,6 +3,8 @@
 # You don't have to copy this file to your instance,
 # just run `./act_runner generate-config > config.yaml` to generate a config file.
 
+{{- with nomadVar "nomad/jobs" -}}
+
 log:
   # The level of logging, can be trace, debug, info, warn, error, fatal
   level: info
@@ -15,7 +17,7 @@ runner:
   # Extra environment variables to run jobs.
   envs:
     NOMAD_ADDR: http://10.0.0.1:4646
-    A_TEST_ENV_NAME_2: a_test_env_value_2
+    NOMAD_TOKEN: {{ .nomad_token }}
   # Extra environment variables to run jobs from a file.
   # It will be ignored if it's empty or the file doesn't exist.
   env_file: .env
@@ -96,3 +98,5 @@ host:
   # The parent directory of a job's working directory.
   # If it's empty, $HOME/.cache/act/ will be used.
   workdir_parent:
+
+{{- end -}}

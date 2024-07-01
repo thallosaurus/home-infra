@@ -47,8 +47,8 @@ job "databases" {
       }
 
       resources {
-        #cpu    = 800 # 500 MHz
-        memory = 512 # 512 MB
+        cpu    = 500 # 500 MHz
+        memory = 1024 # 512 MB
       }
     }
   }

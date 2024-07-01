@@ -99,17 +99,6 @@ EOF
         "traefik.http.routers.sws3.rule=Host(`s3.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
         "traefik.http.routers.sws3.entrypoints=http",
       ]
-      #provider = "nomad"
-
-      #  check {
-      #    name     = "Gitea Frontend Check"
-      #    #path     = "/api/healthz"
-      #    path     = "/"
-      #    type     = "http"
-      #    protocol = "http"
-      #    interval = "10s"
-      #    timeout  = "2s"
-      #  }
     }
 
     service {
@@ -120,7 +109,7 @@ EOF
         "traefik",
         "traefik.enable=true",
         "traefik.http.routers.swwebdav.rule=Host(`webdav.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
-        "traefik.http.routers.swwebdav.entrypoints=http",
+        "traefik.http.routers.swwebdav.entrypoints=http,https",
       ]
     }
 
