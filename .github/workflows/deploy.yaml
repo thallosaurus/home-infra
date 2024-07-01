@@ -13,8 +13,6 @@ jobs:
       - name: Check out repository code 
         uses: actions/checkout@v4
       - name: Deploy ACL
-      #  if: github.event_name == 'push'
-        id: deploy-acl
         uses: tailscale/gitops-acl-action@v1
         with:
           api-key: ${{ secrets.TS_API_KEY }}
