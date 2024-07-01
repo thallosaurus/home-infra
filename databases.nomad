@@ -1,6 +1,10 @@
 job "databases" {
   type = "service"
   group "mysql" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "snappy"
+    }
     network {
       port "mysql" {
         to     = "3306"
@@ -47,7 +51,7 @@ job "databases" {
       }
 
       resources {
-        cpu    = 500 # 500 MHz
+        cpu    = 1000 # 500 MHz
         memory = 1024 # 512 MB
       }
     }

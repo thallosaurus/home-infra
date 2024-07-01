@@ -4,7 +4,8 @@
         {
             "name": "anonymous",
             "actions": [
-                "Read:docs"
+                "Read:docs",
+                "Read:public"
             ]
         },
         {
