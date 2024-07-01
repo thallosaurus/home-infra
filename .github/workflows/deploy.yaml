@@ -3,8 +3,8 @@ run-name: Deploy Nomad and Terraform Configs
 on: [push]
 
 env:
-  NOMAD_ADDR: ${{ env.NOMAD_ADDR }}
-  NOMAD_TOKEN: ${{ env.NOMAD_TOKEN }}
+  NOMAD_ADDR: ${{ secrets.NOMAD_ADDR }}
+  NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
 
 jobs:
   deploy-nomad:
