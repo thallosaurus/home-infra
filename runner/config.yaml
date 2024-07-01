@@ -1,3 +1,4 @@
+{{- with nomadVar "nomad/jobs" -}}
 # Example configuration file, it's safe to copy this as the default config file without any modification.
 
 # You don't have to copy this file to your instance,
@@ -14,13 +15,11 @@ runner:
   # Execute how many tasks concurrently at the same time.
   capacity: 1
   # Extra environment variables to run jobs.
-{{- with nomadVar "nomad/jobs" -}}
 
   envs:
     NOMAD_ADDR: http://10.0.0.1:4646
     NOMAD_TOKEN: {{ .nomad_token }}
 
-{{- end -}}
   # Extra environment variables to run jobs from a file.
   # It will be ignored if it's empty or the file doesn't exist.
   env_file: .env
@@ -101,3 +100,5 @@ host:
   # The parent directory of a job's working directory.
   # If it's empty, $HOME/.cache/act/ will be used.
   workdir_parent:
+
+{{- end -}}

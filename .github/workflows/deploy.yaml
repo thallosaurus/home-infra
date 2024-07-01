@@ -14,21 +14,28 @@ jobs:
         uses: actions/checkout@v4   
       - name: Setup Nomad
         uses: lucasmelin/setup-nomad@v2.0.0
+      - run: nomad volume register volumes/nfs-gitea.hcl
       - run: nomad volume register volumes/nfs-grafana.hcl
       - run: nomad volume register volumes/nfs-influxdb.hcl
       - run: nomad volume register volumes/nfs-prometheus.hcl
       - run: nomad volume register volumes/nfs-hoass.hcl
-#      - run: nomad run bind.nomad
-#      - run: nomad run gitea.nomad
-#      - run: nomad run homeassistant.nomad
+      - run: nomad volume register volumes/nfs-mysql.hcl
+      - run: nomad volume register volumes/nfs-seaweedfs.hcl
+      - run: nomad run bind.nomad
+      - run: nomad run nfs_ci.nomad        
+      - run: nomad run nfs_csi_controller.nomad        
+      - run: nomad run gitea.nomad
+      - run: nomad run homeassistant.nomad
 #      - run: nomad run minecraft.nomad
-#      - run: nomad run samba.nomad
-#      - run: nomad run traefik.nomad
-#      - run: nomad run cloudflared.nomad        
-      - name: Setup Terraform
-        uses: autero1/action-terraform@v3
-        with:
-          terraform-version: 1.8.5
-      - run: terraform init
-      - run: terraform plan
-      - run: terraform apply -auto-approve
+      - run: nomad run samba.nomad
+      - run: nomad run traefik.nomad
+      - run: nomad run cloudflared.nomad        
+      - run: nomad run databases.nomad        
+      - run: nomad run monitor.nomad
+      #- name: Setup Terraform
+      #  uses: autero1/action-terraform@v3
+      #  with:
+      #    terraform-version: 1.8.5
+      #- run: terraform init
+      #- run: terraform plan
+      #- run: terraform apply -auto-approve
