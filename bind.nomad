@@ -79,4 +79,45 @@ job "dns" {
       }
     }
   }
+
+  group "dhcp" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "snappy"
+    }
+
+    network {
+      port "dhcp1" {
+        to     = "67"
+        static = "67"
+      }
+
+      port "dhcp2" {
+        to     = "68"
+        static = "68"
+      }
+    }
+
+    task "dnsmasq" {
+      driver = "docker"
+      template {
+        destination = "tmp/dnsmasq.conf"
+        data        = file("./dhcp/dnsmasq.conf")
+      }
+
+      config {
+        image = "dockurr/dnsmasq"
+        ports = ["dhcp1", "dhcp2"]
+        privileged = true
+
+        network_mode = "host"
+
+        mount {
+          type = "bind"
+          source = "tmp/dnsmasq.conf"
+          target = "/etc/dnsmasq.conf"
+        }
+      }
+    }
+  }
 }
