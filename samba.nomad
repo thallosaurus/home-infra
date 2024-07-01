@@ -109,7 +109,7 @@ EOF
         "traefik",
         "traefik.enable=true",
         "traefik.http.routers.swwebdav.rule=Host(`webdav.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
-        "traefik.http.routers.swwebdav.entrypoints=http,https",
+        "traefik.http.routers.swwebdav.entrypoints=https",
       ]
     }
 
