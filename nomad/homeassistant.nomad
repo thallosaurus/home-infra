@@ -79,8 +79,6 @@ homekit:
         read_only   = false
       }
 
-
-
       config {
         hostname     = "hostname"
         force_pull   = true
@@ -102,7 +100,7 @@ homekit:
         cpu    = 800 # 500 MHz
         memory = 512 # 512 MB
         network {
-          mbits = 300
+          mode = "bridge"
           port "homeassistant_core" { static = 8123 }
           port "avahi" { static = 5353 }
           port "homekit_bridge" {}

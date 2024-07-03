@@ -58,7 +58,7 @@ job "traefik" {
 
       config {
         image = "traefik:v3.0"
-        ports = ["http", "https", "dashboard"]
+        ports = ["http", "https", "dashboard", "public"]
         args  = ["--configFile", "/local/Traefik.yml"]
       }
 

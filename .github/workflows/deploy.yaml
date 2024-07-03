@@ -23,35 +23,24 @@ jobs:
 #          action: apply
       - name: Setup Nomad
         uses: lucasmelin/setup-nomad@v2.0.0
-      #- run: nomad volume register volumes/nfs-gitea.hcl
       - run: nomad volume register volumes/nfs-grafana.hcl
       - run: nomad volume register volumes/nfs-influxdb.hcl
       - run: nomad volume register volumes/nfs-prometheus.hcl
       - run: nomad volume register volumes/nfs-hoass.hcl
-      #- run: nomad volume register volumes/nfs-mysql.hcl
       - run: nomad volume register volumes/nfs-seaweedfs.hcl
       - run: nomad volume register volumes/nfs-keepass-store.hcl
-      - run: nomad run network.nomad
-      - run: nomad run nfs_ci.nomad        
-      - run: nomad run nfs_csi_controller.nomad        
-      #- run: nomad run gitea.nomad
-      - run: nomad run homeassistant.nomad
-#      - run: nomad run minecraft.nomad
-      - run: nomad run samba.nomad
-      - run: nomad run traefik.nomad
-      - run: nomad run cloudflared.nomad        
-      #- run: nomad run databases.nomad        
-      - run: nomad run monitor.nomad
+      - run: nomad volume register volumes/nfs-ytdl.hcl
+      - run: nomad run nomad/network.nomad
+      - run: nomad run nomad/nfs_ci.nomad
+      - run: nomad run nomad/nfs_csi_controller.nomad
+      - run: nomad run nomad/homeassistant.nomad
+      - run: nomad run nomad/samba.nomad
+      - run: nomad run nomad/traefik.nomad
+      - run: nomad run nomad/cloudflared.nomad
+      - run: nomad run nomad/monitor.nomad
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
           args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
-      #- name: Setup Terraform
-      #  uses: autero1/action-terraform@v3
-      #  with:
-      #    terraform-version: 1.8.5
-      #- run: terraform init
-      #- run: terraform plan
-      #- run: terraform apply -auto-approve

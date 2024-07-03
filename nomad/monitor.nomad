@@ -1,6 +1,7 @@
 job "monitor" {
   group "prometheus" {
     network {
+      mode = "bridge"
       dns {
         servers = ["10.0.0.1"]
       }
@@ -117,6 +118,7 @@ scrape_configs:
 
   group "grafana" {
     network {
+      mode = "bridge"
       dns {
         servers = ["10.0.0.1"]
       }
@@ -163,6 +165,7 @@ scrape_configs:
 
   group "influxdb" {
     network {
+      mode = "bridge"
       port "http" {
         to = "8086"
       }

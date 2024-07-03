@@ -3,7 +3,7 @@ job "minecraft" {
 
   group "mc" {
     network {
-
+      mode = "bridge"
       port "minecraft" {
         to     = "25565"
         static = "25565"
