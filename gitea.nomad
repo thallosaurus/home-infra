@@ -2,6 +2,7 @@ job "gitea" {
   type = "service"
 
   group "gitea" {
+    count = 0
     network {
       dns {
         servers = [
@@ -11,12 +12,12 @@ job "gitea" {
         ]
       }
       port "http" {
-        to     = "3000"
+        to = "3000"
         #static = "3456"
       }
 
       port "ssh" {
-        to     = "22"
+        to = "22"
         #static = "2222"
       }
     }
@@ -72,6 +73,7 @@ job "gitea" {
     }
 
     task "runner" {
+      count = 0
       driver = "docker"
 
       template {

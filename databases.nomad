@@ -1,6 +1,7 @@
 job "databases" {
   type = "service"
   group "mysql" {
+    count = 0
     constraint {
       attribute = "${node.unique.name}"
       value     = "snappy"
@@ -58,6 +59,7 @@ job "databases" {
   }
 
   group "pma" {
+    count = 0
     network {
       port "http" {
         to = "80"
@@ -89,8 +91,8 @@ job "databases" {
       driver = "docker"
 
       env {
-        PMA_HOST = "mysql.service.consul"
-        PMA_USER = "pma"
+        PMA_HOST     = "mysql.service.consul"
+        PMA_USER     = "pma"
         PMA_PASSWORD = "pma123"
       }
 
