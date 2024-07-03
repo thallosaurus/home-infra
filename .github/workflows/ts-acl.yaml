@@ -1,0 +1,15 @@
+name: Deploy Tailscale ACL
+on: [push]
+
+jobs:
+  deploy-nomad:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code 
+        uses: actions/checkout@v4
+      - name: Deploy ACL
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          api-key: ${{ secrets.TS_AUTHKEY }}
+          tailnet: ${{ secrets.TS_TAILNET }}
+          action: apply
