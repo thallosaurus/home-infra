@@ -34,13 +34,13 @@ jobs:
       - run: nomad run bind.nomad
       - run: nomad run nfs_ci.nomad        
       - run: nomad run nfs_csi_controller.nomad        
-      - run: nomad run gitea.nomad
+      #- run: nomad run gitea.nomad
       - run: nomad run homeassistant.nomad
 #      - run: nomad run minecraft.nomad
       - run: nomad run samba.nomad
       - run: nomad run traefik.nomad
       - run: nomad run cloudflared.nomad        
-      - run: nomad run databases.nomad        
+      #- run: nomad run databases.nomad        
       - run: nomad run monitor.nomad
       #- name: Setup Terraform
       #  uses: autero1/action-terraform@v3
