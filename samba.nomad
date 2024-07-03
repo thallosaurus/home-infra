@@ -173,19 +173,7 @@ EOF
         static = "30303"
       }
     }
-
-    #    service {
-    #      name = "webdav"
-    #      port = "webdav"
-
-    #      tags = [
-    #        "traefik",
-    #        "traefik.enable=true",
-    #        "traefik.http.routers.webdav.rule=Host(`webdav.apps.cyber.psych0si.is`) && PathPrefix(`/`)",#
-    #        "traefik.http.routers.webdav.entrypoints=http",
-    #      ]
-    #    }
-
+    
     volume "keepass-store" {
       type            = "csi"
       read_only       = false

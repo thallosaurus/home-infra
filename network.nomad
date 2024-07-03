@@ -23,12 +23,48 @@ job "network" {
       driver = "docker"
       template {
         destination = "tmp/named.conf.local"
-        data        = file("./bind/named.conf.local")
+        data        = <<EOH
+//include "/etc/bind/zones.rfc1918";
+
+zone "apps.cyber.psych0si.is" {
+  type master;
+  file "/etc/bind/zones/db.apps.cyber.psych0si.is";
+};
+
+zone "int.cyber.psych0si.is" {
+  type master;
+  file "/etc/bind/zones/db.int.cyber.psych0si.is";
+};
+
+zone "0.0.10.in-addr.arpa" {
+  type master;
+  file "/etc/bind/zones/db.0.0.10.in-addr.arpa";
+};
+
+zone "consul" IN {
+  type forward;
+  forward only;
+  forwarders { 10.0.0.1 port 8600; };
+};
+        EOH
       }
 
       template {
         destination = "tmp/named.conf.options"
-        data        = file("./bind/named.conf.options")
+        data        = <<EOH
+options {
+  directory "/var/cache/bind";
+  allow-query { any; };
+  recursion yes;
+  dnssec-validation no;
+  forwarders {
+    // 10.0.0.254;
+    8.8.8.8;
+  };
+  auth-nxdomain no;
+  listen-on-v6 { any; };
+};
+        EOH
       }
 
       template {

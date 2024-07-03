@@ -34,6 +34,7 @@ job "traefik" {
         "traefik",
         "traefik.enable=true",
         "traefik.http.routers.traefik-dashboard.rule=Host(`traefik-dashboard.apps.cyber.psych0si.is`)",
+        "traefik.http.routers.traefik-dashboard.entrypoints=http"
       ]
       #provider = "nomad"
 
