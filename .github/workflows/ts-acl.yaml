@@ -2,7 +2,7 @@ name: Deploy Tailscale ACL
 on: [push]
 
 jobs:
-  deploy-nomad:
+  deploy-acl:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code 
