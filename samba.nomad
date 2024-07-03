@@ -173,7 +173,7 @@ EOF
         static = "30303"
       }
     }
-    
+
     volume "keepass-store" {
       type            = "csi"
       read_only       = false
@@ -245,9 +245,6 @@ EOF
 /mnt/nfs/influxdb  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/prometheus  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/homeassistant  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
-/mnt/nfs/gitea  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
-/mnt/nfs/mysql  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
-/mnt/nfs/gitness  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/seaweedfs  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/keepass  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
         EOH
