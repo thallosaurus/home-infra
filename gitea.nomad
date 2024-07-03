@@ -73,7 +73,6 @@ job "gitea" {
     }
 
     task "runner" {
-      count = 0
       driver = "docker"
 
       template {
