@@ -8,8 +8,6 @@ $TTL    604800
 ;
 @       IN      NS      ns1.apps.cyber.psych0si.is.
 ns1       IN      A       10.0.0.1
-gitea       IN      CNAME       traefik.service.consul.
-minio       IN      CNAME       traefik.service.consul.
 s3       IN      CNAME       traefik.service.consul.
 *.s3       IN      CNAME       s3
 drone       IN      CNAME       traefik.service.consul.
@@ -21,7 +19,6 @@ headscale       IN      CNAME       traefik.service.consul.
 prometheus       IN      CNAME       traefik.service.consul.
 grafana       IN      CNAME       traefik.service.consul.
 influxdb       IN      CNAME       traefik.service.consul.
-pma       IN      CNAME       traefik.service.consul.
-freepbx       IN      CNAME       traefik.service.consul.
 webdav       IN      CNAME       traefik.service.consul.
 filer       IN      CNAME       traefik.service.consul.
+;gitea       IN      CNAME       traefik.service.consul.

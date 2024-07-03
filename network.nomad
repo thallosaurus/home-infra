@@ -1,4 +1,4 @@
-job "dns" {
+job "network" {
   type = "service"
 
   update {
@@ -6,7 +6,7 @@ job "dns" {
     max_parallel = 3
   }
 
-  group "bind" {
+  group "dns" {
     constraint {
       attribute = "${node.unique.name}"
       value     = "snappy"
