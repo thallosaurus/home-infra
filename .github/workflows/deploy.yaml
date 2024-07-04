@@ -54,8 +54,8 @@ jobs:
       - run: nomad volume register volumes/nfs-keepass-store.hcl
       - run: nomad volume register volumes/nfs-ytdl.hcl
       - run: nomad run jobs/network.hcl
-      - run: nomad run jobs/nfs_ci.hcl
-      - run: nomad run jobs/nfs_csi_controller.hcl
+      - run: nomad run jobs/plugins/nfs_csi_nodes.hcl
+      - run: nomad run jobs/plugins/nfs_csi_controller.hcl
       - run: nomad run jobs/homeassistant.hcl
       - run: nomad run jobs/samba.hcl
       - run: nomad run jobs/traefik.hcl
