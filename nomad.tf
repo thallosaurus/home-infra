@@ -53,3 +53,10 @@ resource "nomad_job" "cloudflared" {
     allow_fs = true
   }
 }
+
+resource "nomad_job" "samba" {
+  jobspec = file("${path.module}/jobs/samba.hcl")
+  hcl2 {
+    allow_fs = true
+  }
+}

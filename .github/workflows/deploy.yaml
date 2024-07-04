@@ -58,20 +58,15 @@ jobs:
       - run: nomad volume register volumes/nfs-seaweedfs.hcl
       - run: nomad volume register volumes/nfs-keepass-store.hcl
       - run: nomad volume register volumes/nfs-ytdl.hcl
-  #      - run: nomad run jobs/network.hcl
   #      - run: nomad run jobs/plugins/nfs_csi_nodes.hcl
   #      - run: nomad run jobs/plugins/nfs_csi_controller.hcl
-  #      - run: nomad run jobs/homeassistant.hcl
-  #      - run: nomad run jobs/vpn.hcl
   #      - run: nomad run jobs/samba.hcl
-  #      - run: nomad run jobs/traefik.hcl
-  #      - run: nomad run jobs/cloudflared.hcl
-  #      - run: nomad run jobs/monitor.hcl
-  #      - run: nomad run jobs/metube.hcl
 
   terraform-plan:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       # Install the latest version of the Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -180,7 +175,7 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
   notifications:
-    needs: [ansible, nomad]
+    needs: [ansible, nomad, terraform-apply]
     runs-on: ubuntu-latest
     steps:
       - name: Discord notification
