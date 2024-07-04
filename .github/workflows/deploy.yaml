@@ -23,8 +23,8 @@ jobs:
           contents: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
 
       - name: Fix rsync
-        run: mkdir conf/nomad
-        
+        run: mkdir -p conf/nomad
+
       - name: Run Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
