@@ -6,6 +6,39 @@ env:
   NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
 
 jobs:
+  ansible:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code 
+        uses: actions/checkout@v4
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TS_AUTHKEY }}
+
+      - name: Write Out Ansible Vault Password
+        uses: DamianReeves/write-file-action@master
+        with:
+          path: ansible.vault
+          contents: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+
+      - name: Fix rsync
+        run: mkdir -p conf/nomad
+
+      - name: Run Ansible Playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: ansible/playbook.yaml
+          key: ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}
+          inventory: |
+            [main]
+            10.0.0.1
+            10.0.0.3
+            10.0.0.5
+          options: |
+            -e @static_keys.yaml
+            --vault-password-file ansible.vault
+            
   nomad:
     needs: ansible
     runs-on: ubuntu-latest
