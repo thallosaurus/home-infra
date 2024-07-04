@@ -57,10 +57,12 @@ jobs:
       - run: nomad run jobs/plugins/nfs_csi_nodes.hcl
       - run: nomad run jobs/plugins/nfs_csi_controller.hcl
       - run: nomad run jobs/homeassistant.hcl
+      - run: nomad run jobs/headscale.hcl
       - run: nomad run jobs/samba.hcl
       - run: nomad run jobs/traefik.hcl
       - run: nomad run jobs/cloudflared.hcl
       - run: nomad run jobs/monitor.hcl
+      - run: nomad run jobs/metube.hcl
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
