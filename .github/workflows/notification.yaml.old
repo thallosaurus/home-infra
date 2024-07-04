@@ -1,4 +1,4 @@
-name: Run Ansible
+name: Notify
 on: [push]
 
 jobs:
