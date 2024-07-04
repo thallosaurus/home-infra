@@ -4,10 +4,10 @@ job "demo-webapp" {
   group "nginx" {
     count = 1
 
-    constraint {
-      attribute = "${node.unique.name}"
-      value     = "snappy"
-    }
+    #constraint {
+    #  attribute = "${node.unique.name}"
+    #  value     = "snappy"
+    #}
 
     network {
       mode = "cni/home"

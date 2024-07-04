@@ -64,12 +64,12 @@ job "traefik" {
 
       template {
         destination = "/local/dynamic.yml"
-        data      = file("./traefik/dynamic.yml")
+        data      = file("./appdata/traefik/dynamic.yml")
       }
 
       template {
         destination = "/local/Traefik.yml"
-        data        = file("./traefik/traefik.yml")
+        data        = file("./appdata/traefik/traefik.yml")
       }
 
       /*volumes = [

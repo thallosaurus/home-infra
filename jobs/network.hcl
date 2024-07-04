@@ -69,17 +69,17 @@ options {
 
       template {
         destination = "tmp/db.0.0.10.in-addr.arpa"
-        data        = file("./bind/db.0.0.10.in-addr.arpa")
+        data        = file("./appdata/dns/db.0.0.10.in-addr.arpa")
       }
 
       template {
         destination = "tmp/db.int.cyber.psych0si.is"
-        data        = file("./bind/db.int.cyber.psych0si.is")
+        data        = file("./appdata/dns/db.int.cyber.psych0si.is")
       }
 
       template {
         destination = "tmp/db.apps.cyber.psych0si.is"
-        data        = file("./bind/db.apps.cyber.psych0si.is")
+        data        = file("./appdata/dns/db.apps.cyber.psych0si.is")
       }
 
       config {
@@ -138,7 +138,7 @@ options {
       driver = "docker"
       template {
         destination = "tmp/dnsmasq.conf"
-        data        = file("./dhcp/dnsmasq.conf")
+        data        = file("./appdata/dhcp/dnsmasq.conf")
       }
 
       config {

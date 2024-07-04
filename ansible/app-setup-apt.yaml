@@ -1,0 +1,44 @@
+---
+- name: Add Docker Repo Key APT
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repo APT
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu noble stable
+    state: present
+
+- name: Add HCP Repo Key APT
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Add HCP Repo APT
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.releases.hashicorp.com noble main
+    state: present
+
+- name: Install Nomad, Consul and Docker
+  ansible.builtin.apt:
+    pkg:
+      - nomad
+      - consul
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+
+- name: Sync Nomad Configs
+  ansible.posix.synchronize:
+    src: ../conf/nomad/
+    dest: /etc/nomad.d/
+    delete: true
+
+- name: Template Consul Config
+  ansible.builtin.template:
+    src: ../conf/consul/consul.hcl
+    dest: /etc/consul.d/consul.hcl
+    force: true

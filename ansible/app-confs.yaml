@@ -1,0 +1,34 @@
+---
+- name: Prepare Nomad Config folder
+  shell: rm -rf /etc/nomad.d/*
+
+#- name: Prepare Server Config Folders
+#  shell: mkdir -p /etc/nomad.d/server
+#  when: ansible_hostname == "snappy"
+
+- name: Sync Nomad Configs
+  ansible.posix.synchronize:
+    src: ../conf/nomad-common/
+    dest: /etc/nomad.d/
+
+- name: Enable Nomad Server Mode
+  copy:
+    src: ../conf/nomad-master/server.hcl
+    dest: /etc/nomad.d/server.hcl
+  when: ansible_hostname == "snappy"
+
+- name: Enable Nomad Client Mode
+  copy:
+    src: ../conf/nomad-clients/{{ ansible_hostname }}.hcl
+    dest: /etc/nomad.d/client.hcl
+  #when: ansible_hostname == "snappy"
+
+- name: Template Consul Config
+  ansible.builtin.template:
+    src: ../conf/consul/consul.hcl
+    dest: /etc/consul.d/consul.hcl
+    force: true
+
+- name: Setup Consul Autojoin
+  ansible.builtin.shell: echo 'retry_join = ["10.0.0.1"]' > /etc/consul.d/autojoin.hcl
+  when: ansible_hostname != "snappy"

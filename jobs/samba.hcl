@@ -36,7 +36,7 @@ job "fileserver" {
 
       template {
         destination = "smb.conf"
-        data        = file("./samba/smb.conf")
+        data        = file("./appdata/samba/smb.conf")
       }
 
       env {
@@ -138,7 +138,7 @@ EOF
       driver = "docker"
       template {
         destination = "local/config.json"
-        data        = file("s3/config.json")
+        data        = file("acls/s3.json")
       }
 
       volume_mount {

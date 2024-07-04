@@ -15,12 +15,25 @@ jobs:
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.TS_AUTHKEY }}
-#      - name: Deploy ACL
-#        uses: tailscale/gitops-acl-action@v1
-#        with:
-#          api-key: ${{ secrets.TS_API_KEY }}
-#          tailnet: ${{ secrets.TS_TAILNET }}
-#          action: apply
+
+      - name: Write Out Ansible Vault Password
+        uses: DamianReeves/write-file-action@master
+        with:
+          path: ansible.vault
+          contents: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      - name: Run Ansible Playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: ansible/playbook.yaml
+          key: ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}
+          inventory: |
+            [main]
+            10.0.0.1
+            10.0.0.3
+            10.0.0.5
+          options: |
+            -e @static_keys.yaml
+            --vault-password-file ansible.vault
       - name: Setup Nomad
         uses: lucasmelin/setup-nomad@v2.0.0
       - run: nomad volume register volumes/nfs-grafana.hcl
@@ -30,14 +43,14 @@ jobs:
       - run: nomad volume register volumes/nfs-seaweedfs.hcl
       - run: nomad volume register volumes/nfs-keepass-store.hcl
       - run: nomad volume register volumes/nfs-ytdl.hcl
-      - run: nomad run nomad/network.nomad
-      - run: nomad run nomad/nfs_ci.nomad
-      - run: nomad run nomad/nfs_csi_controller.nomad
-      - run: nomad run nomad/homeassistant.nomad
-      - run: nomad run nomad/samba.nomad
-      - run: nomad run nomad/traefik.nomad
-      - run: nomad run nomad/cloudflared.nomad
-      - run: nomad run nomad/monitor.nomad
+      - run: nomad run jobs/network.hcl
+      - run: nomad run jobs/nfs_ci.hcl
+      - run: nomad run jobs/nfs_csi_controller.hcl
+      - run: nomad run jobs/homeassistant.hcl
+      - run: nomad run jobs/samba.hcl
+      - run: nomad run jobs/traefik.hcl
+      - run: nomad run jobs/cloudflared.hcl
+      - run: nomad run jobs/monitor.hcl
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}

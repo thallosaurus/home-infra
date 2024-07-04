@@ -1,0 +1,31 @@
+- name: My first play
+  hosts: main
+  remote_user: root
+  tasks:
+    - name: Ping my hosts
+      ansible.builtin.ping:
+
+    - name: Prerequisites
+      ansible.builtin.package:
+        name:
+        - zip
+        state: present
+
+    # sudo apt-get update && \
+#  sudo apt-get install wget gpg coreutils
+    - name: App Setup DNF
+      ansible.builtin.import_tasks: app-setup-dnf.yaml
+      when: ansible_distribution == 'Fedora'
+
+    - name: App Setup APT
+      ansible.builtin.import_tasks: app-setup-apt.yaml
+      when: ansible_distribution == 'Debian'
+
+    - name: App Configs
+      ansible.builtin.import_tasks: app-confs.yaml
+
+    - name: CNI Config
+      ansible.builtin.import_tasks: cni-config.yaml
+
+    - name: Services
+      ansible.builtin.import_tasks: services.yaml

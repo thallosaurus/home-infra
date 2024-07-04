@@ -3,3 +3,7 @@
 .terraform*
 *.tfstate
 *.token
+ansible.vault
+ssh.pub
+ssh
+inventory.ini

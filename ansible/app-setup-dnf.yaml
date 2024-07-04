@@ -1,0 +1,23 @@
+---
+- name: Prerequisites
+  ansible.builtin.dnf:
+    name: dnf-plugins-core
+    state: present
+
+- name: Add Docker Repo DNF
+  ansible.builtin.shell: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
+- name: Add HCP Repo DNF
+  ansible.builtin.shell: dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+
+- name: Install Nomad, Consul and Docker
+  ansible.builtin.dnf:
+    name:
+      - nomad
+      - consul
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
