@@ -11,6 +11,6 @@
 
 - name: Reload Consul
   ansible.builtin.systemd_service:
-    state: reloaded
+    state: restarted
     name: consul
     no_block: true

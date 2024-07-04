@@ -17,6 +17,10 @@
     dest: /etc/nomad.d/server.hcl
   when: ansible_hostname == "snappy"
 
+
+- name: Prepare Consul Config folder
+  shell: rm -rf /etc/consul.d/*
+
 - name: Enable Nomad Client Mode
   copy:
     src: ../conf/nomad-clients/{{ ansible_hostname }}.hcl
@@ -29,6 +33,18 @@
     dest: /etc/consul.d/consul.hcl
     force: true
 
+- name: Enable Consul Server
+  ansible.builtin.raw: echo server = true >> /etc/consul.d/consul.hcl
+  when: ansible_hostname == "snappy"
+
+- name: Enable Consul Bootstrap
+  ansible.builtin.raw: echo bootstrap_expect=1 >> /etc/consul.d/consul.hcl
+  when: ansible_hostname == "snappy"
+
+#- name: Advertise Consul IP
+#  ansible.builtin.raw: echo -e advertise_addr = \"{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}\" >> /etc/consul.d/consul.hcl
+  #when: ansible_hostname == "snappy"
+
 - name: Setup Consul Autojoin
-  ansible.builtin.shell: echo 'retry_join = ["10.0.0.1"]' > /etc/consul.d/autojoin.hcl
+  ansible.builtin.raw: echo -e retry_join = [\"10.0.0.1\"] >> /etc/consul.d/consul.hcl
   when: ansible_hostname != "snappy"

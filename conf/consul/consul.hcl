@@ -24,7 +24,7 @@ data_dir = "/opt/consul"
 # servers. By default, this is "127.0.0.1", allowing only loopback connections. In
 # Consul 1.0 and later this can be set to a space-separated list of addresses to bind
 # to, or a go-sockaddr template that can potentially resolve to multiple addresses.
-client_addr = "0.0.0.0"
+client_addr = "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} 127.0.0.1"
 
 # ui
 # Enables the built-in web UI server and the required HTTP routes. This eliminates
@@ -43,7 +43,7 @@ ui_config{
 # ensure availability in the case of node failure. Server nodes also participate in a
 # WAN gossip pool with server nodes in other datacenters. Servers act as gateways to
 # other datacenters and forward traffic as appropriate.
-server = true
+#server = true
 
 # Bind addr
 # You may use IPv4 or IPv6 but if you have multiple interfaces you must be explicit.
@@ -51,7 +51,7 @@ server = true
 bind_addr = "0.0.0.0" # Listen on all IPv4
 #
 # Advertise addr - if you want to point clients to a different address than bind or LB.
-advertise_addr = "127.0.0.1"
+advertise_addr = "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 
 # Enterprise License
 # As of 1.10, Enterprise requires a license_path and does not have a short trial.
@@ -64,7 +64,7 @@ advertise_addr = "127.0.0.1"
 # bootstraps the cluster. This allows an initial leader to be elected automatically.
 # This cannot be used in conjunction with the legacy -bootstrap flag. This flag requires
 # -server mode.
-bootstrap_expect=1
+
 
 # encrypt
 # Specifies the secret key to use for encryption of Consul network traffic. This key must

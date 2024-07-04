@@ -25,6 +25,12 @@ jobs:
       - name: Fix rsync
         run: mkdir -p conf/nomad
 
+#      - name: Lint Ansible Playbook
+#        uses: ansible/ansible-lint-action@master
+#        with:
+#          targets: |
+#            ansible/playbook.yaml
+
       - name: Run Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
