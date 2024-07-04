@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "consul" {
-    address = "consul.service.consul:8500"
+    address = "10.0.0.1:8500"
     scheme  = "http"
     path    = "terraform/state"
   }
@@ -17,5 +17,5 @@ terraform {
 #}
 
 provider "nomad" {
-  address = "http://nomad.service.consul:4646"
+  address = "http://10.0.0.1:4646"
 }
