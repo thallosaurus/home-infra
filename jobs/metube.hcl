@@ -26,7 +26,7 @@ job "metube" {
           "traefik",
           "traefik.enable=true",
           "traefik.http.routers.metube.rule=Host(`metube.apps.cyber.psych0si.is`) && PathPrefix(`/`)",
-          "traefik.http.routers.metube.entrypoints=http"
+          "traefik.http.routers.metube.entrypoints=http,public"
         ]
       }
 

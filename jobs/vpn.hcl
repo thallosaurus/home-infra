@@ -1,9 +1,9 @@
 job "vpn" {
   group "tailscale" {
-    constraint {
-      attribute = "${node.unique.name}"
-      value     = "snappy"
-    }
+    #constraint {
+    #  attribute = "${node.unique.name}"
+    #  value     = "snappy"
+    #}
     task "ts" {
       driver = "docker"
 

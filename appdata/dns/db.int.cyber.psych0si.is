@@ -13,3 +13,4 @@ switch       IN      A       10.0.0.2
 fileserver       IN      A       10.0.0.3
 pi3       IN      A       10.0.0.4
 pi4       IN      A       10.0.0.5
+rastaman       IN      A       10.0.0.6

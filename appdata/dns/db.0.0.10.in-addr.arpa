@@ -7,3 +7,8 @@ $TTL 1D
                         300 )      ; minimum
          IN        NS    ns1.int.cyber.psych0si.is.
 1        IN        PTR   ns1.int.cyber.psych0si.is.
+2        IN        PTR   switch.int.cyber.psych0si.is.
+3        IN        PTR   fileserver.int.cyber.psych0si.is.
+4        IN        PTR   pi3.int.cyber.psych0si.is.
+5        IN        PTR   pi4.int.cyber.psych0si.is.
+6        IN        PTR   rastaman.int.cyber.psych0si.is.

@@ -10,7 +10,7 @@ job "demo-webapp" {
     #}
 
     network {
-      mode = "cni/home"
+      mode = "bridge"
       port "http" {
         to = "80"
       }
