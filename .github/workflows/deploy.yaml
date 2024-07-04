@@ -1,4 +1,4 @@
-name: Deploy Infra Config
+name: Deploy Nomad Config
 on: [push]
 
 env:
@@ -6,7 +6,8 @@ env:
   NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
 
 jobs:
-  deploy-nomad:
+  nomad:
+    needs: ansible
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code 
@@ -15,35 +16,6 @@ jobs:
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.TS_AUTHKEY }}
-
-      - name: Write Out Ansible Vault Password
-        uses: DamianReeves/write-file-action@master
-        with:
-          path: ansible.vault
-          contents: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-
-      - name: Fix rsync
-        run: mkdir -p conf/nomad
-
-#      - name: Lint Ansible Playbook
-#        uses: ansible/ansible-lint-action@master
-#        with:
-#          targets: |
-#            ansible/playbook.yaml
-
-      - name: Run Ansible Playbook
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          playbook: ansible/playbook.yaml
-          key: ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}
-          inventory: |
-            [main]
-            10.0.0.1
-            10.0.0.3
-            10.0.0.5
-          options: |
-            -e @static_keys.yaml
-            --vault-password-file ansible.vault
       - name: Setup Nomad
         uses: lucasmelin/setup-nomad@v2.0.0
       - run: nomad volume register volumes/nfs-grafana.hcl
@@ -63,9 +35,3 @@ jobs:
       - run: nomad run jobs/cloudflared.hcl
       - run: nomad run jobs/monitor.hcl
       - run: nomad run jobs/metube.hcl
-      - name: Discord notification
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: Ilshidur/action-discord@master
-        with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
