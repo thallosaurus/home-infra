@@ -4,13 +4,13 @@
 #    state: restarted
 #    name: docker
 
-- name: Restart Nomad
+- name: Reload Nomad
   ansible.builtin.systemd_service:
-    state: restarted
+    state: reloaded
     name: nomad
 
-- name: Restart Consul
+- name: Reload Consul
   ansible.builtin.systemd_service:
-    state: restarted
+    state: reloaded
     name: consul
     no_block: true

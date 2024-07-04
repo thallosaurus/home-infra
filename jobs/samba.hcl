@@ -218,6 +218,7 @@ EOF
   }
 
   group "nfs" {
+    count = 0
     network {
       port "nfs" {
         static = "2049"
@@ -227,6 +228,15 @@ EOF
         static = "111"
         to     = "111"
       }
+
+      port "v3-1" {
+        static = "32765"
+        to     = "32765"
+      }
+      port "v3-2" {
+        static = "32767"
+        to     = "32767"
+      }
     }
 
     volume "fs" {
@@ -235,8 +245,18 @@ EOF
       source    = "samba-fs"
     }
 
+
     task "nfs" {
       driver = "docker"
+
+      resources {
+        memory = 300
+      }
+
+
+      env {
+        NFS_LOG_LEVEL = "DEBUG"
+      }
 
       template {
         destination = "local/exports"
@@ -261,8 +281,9 @@ EOF
       config {
         privileged   = true
         image        = "erichough/nfs-server"
-        ports        = ["nfs", "rpc"]
+        ports        = ["nfs", "rpc", "v3-1", "v3-2"]
         network_mode = "host"
+        #        cap_add = ["sys_admin", "sys_module"]
 
         mount {
           type   = "bind"

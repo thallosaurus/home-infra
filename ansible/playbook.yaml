@@ -21,6 +21,10 @@
       ansible.builtin.import_tasks: app-setup-apt.yaml
       when: ansible_distribution == 'Debian'
 
+    - name: NFS Configs
+      ansible.builtin.import_tasks: nfs-setup.yaml
+      when: ansible_hostname == "fileserver"
+      
     - name: App Configs
       ansible.builtin.import_tasks: app-confs.yaml
 

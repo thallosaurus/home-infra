@@ -1,0 +1,8 @@
+---
+- name: Enable Nomad Server Mode
+  copy:
+    src: ../nfs/exports
+    dest: /etc/exports
+
+- name: Reload NFS
+  shell: exportfs -ra
