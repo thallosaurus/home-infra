@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<h1>Adding new nodes</h1>
+<p>To add a new node, add your ssh public key, the one used by github actions and any other you need to your root account. Configure network and run the ansible playbook</p>
+<h1>Ansible</h1>
+<p>Ansible takes the role to provision each server with the required configs for docker, nomad and consul. It also can be used to provision new Servers</p>
+<p>To run it, use the following one-liner:
+<pre class="highlight"><code class="language-bash">ansible-playbook -i inventory.ini ansible/playbook.yaml -e @static_keys.yaml --vault-password-file ansible.vault</code></pre></p>
+<p>This requires the following conditions:
+- The working Directory must be the project root
+- your ansible inventory must contain a group called <code>main</code> that holds all IPs
+- your ansible-vault file must be named <code>@static_keys.yaml</code>
+- your ansible-vault password must be stored in a file valled <code>ansible.vault</code>. Don't worry, the file is in <code>.gitignore</code>.</p>
+<h3>The Ansible Vault</h3>
+<p>Currently it holds only one key that references the consul secret key. Its called <code>consul_encrypt_key</code></p>
+<h1>CI/CD</h1>
+<p>Automatic refreshment of all jobs on push is done using Github Actions. Each Action connects over tailscale with the server and runs each job
+snappy:
+  - dhcp
+  - nomad
+    - dns</p>
+<p>fileserver:
+  - samba</p>
+<h1>Kea</h1>
+<p>Ports: 8080/tcp, 67/udp, 68/udp</p>
+<h1>Domains</h1>
+<p>The Network exposes the following DNS Zones:
+1. .apps.cyber.psych0si.is
+2. .int.cyber.psych0si.is</p>
+<p>Each Zone gets manually assigned by the admin with the corresponding zone configs found in the <code>bind/</code> folder. Because <code>.int.&lt;...&gt;</code> is mapped to a physical network it also has a reverse dns zone. Most of them are just CNAMES for traefik reverse proxy tho.</p>
+<h1>Nomad</h1>
+<p>This provisions all scheduled containers and makes sure the containers keep running across the fleet</p>
+<h2>Addresses</h2>
+<p>vlan id: 40</p>
+<p>Mac: 7
+ps4: 8</p>
+<h1>Wiki</h1>
+<p>Because I got a S3 server up and running I want to test it out by documenting my Network and uploading it wiki like to the buckets which should get served by a reverse proxy (traefik)</p>

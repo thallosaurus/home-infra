@@ -113,7 +113,17 @@ jobs:
       - name: Terraform Plan
         id: tf-plan
         run: |
-          terraform plan -detailed-exitcode -no-color -out tfplan || exit 0
+          export exitcode=0
+          terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+        
+          if [ $exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          else 
+            exit 0
+          fi
 
       # Save plan to artifacts
       - name: Publish Terraform Plan
@@ -166,6 +176,7 @@ jobs:
   terraform-apply:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
+    if: needs.terraform-plan.outputs.tfplanExitCode == 2
     needs: [terraform-plan]
 
     steps:
@@ -215,6 +226,25 @@ jobs:
         with:
           name: docs.html
           path: docs.html
+
+  publish-docs:
+    runs-on: ubuntu-latest
+    needs: terraform-apply
+    steps:
+              # Download saved plan from artifacts
+      - name: Download Docs File
+        uses: actions/download-artifact@v4
+        with:
+          name: docs.html
+            # Download saved plan from artifacts
+      - name: Upload to S3 Storage
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: ${{ secrets.AWS_BUCKET }}
+          source_dir: 'dirname'
+          endpoint: s3.apps.cyber.psych0si.is
 
   notifications:
     needs: [ansible, nomad, terraform-apply]
