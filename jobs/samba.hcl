@@ -94,10 +94,10 @@ EOF
       }
     }
 
-    service {
-      name = "weedmaster"
-      port = "master"
-    }
+    #service {
+    #  name = "weedmaster"
+    #  port = "master"
+    #}
 
     service {
       name = "s3"

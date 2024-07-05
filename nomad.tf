@@ -60,3 +60,10 @@ resource "nomad_job" "samba" {
     allow_fs = true
   }
 }
+
+resource "nomad_job" "minecraft" {
+  jobspec = file("${path.module}/jobs/minecraft.hcl")
+  hcl2 {
+    allow_fs = true
+  }
+}

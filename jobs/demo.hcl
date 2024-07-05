@@ -24,10 +24,26 @@ job "demo-webapp" {
     task "nginx" {
       driver = "docker"
 
+      template {
+        destination = "local/index.html"
+        data        = <<EOH
+        <h1>Hello</h1>
+{{ range service "minecraft" -}}
+<p>{{ .Address }}:{{ .Port }};</p>
+{{ end }}
+  EOH
+      }
+
       config {
         image = "nginx"
 
         ports = ["http"]
+
+        mount {
+          type   = "bind"
+          source = "local/index.html"
+          target = "/usr/share/nginx/html/index.html"
+        }
       }
     }
   }

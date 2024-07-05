@@ -14,18 +14,20 @@ job "minecraft" {
       name = "minecraft"
       port = "minecraft"
 
-      check {
-        name     = "Minecraft Check"
-        type     = "tcp"
-        interval = "10s"
-        timeout  = "2s"
-      }
+      #check {
+      #  name     = "Minecraft Check"
+      #  type     = "tcp"
+      #  interval = "10s"
+      #  timeout  = "2s"
+      #}
     }
 
     volume "data" {
-      type      = "host"
-      read_only = false
-      source    = "minecraft-data"
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_minecraft"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
     }
 
     task "minecraft" {
