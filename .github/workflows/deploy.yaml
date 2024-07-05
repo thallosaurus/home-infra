@@ -219,7 +219,7 @@ jobs:
       - uses: ZacJW/markdown-html-action@1.1.0
         with:
           input_files: '[["docs/*.md"]]'
-          output_files: '["docs_out/docs.html"]'
+          output_files: '["out/docs.html"]'
           #builtin_stylesheet: 'style.css'
           packages: "pymdown-extensions"
           extensions: '["pymdownx.extra"]'
@@ -245,7 +245,7 @@ jobs:
           aws_key_id: ${{ secrets.AWS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
           aws_bucket: ${{ secrets.AWS_BUCKET }}
-          source_dir: "docs_out"
+          source_dir: "."
           endpoint: s3.cyber.psych0si.is
 
   notifications:
