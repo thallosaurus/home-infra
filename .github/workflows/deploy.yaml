@@ -43,7 +43,7 @@ jobs:
   tailscale-acl:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code 
+      - name: Check out repository code
         uses: actions/checkout@v4
       - name: Test ACL
         uses: tailscale/gitops-acl-action@v1
@@ -119,7 +119,7 @@ jobs:
           terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-        
+
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
@@ -158,22 +158,22 @@ jobs:
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
-#      # If this is a PR post the changes
-#      - name: Push Terraform Output to PR
-#        if: github.ref != 'refs/heads/main'
-#        uses: actions/github-script@v7
-#        env:
-#          SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
-#        with:
-#          github-token: ${{ secrets.GITHUB_TOKEN }}
-#          script: |
-#            const body = `${process.env.SUMMARY}`;
-#            github.rest.issues.createComment({
-#                issue_number: context.issue.number,
-#                owner: context.repo.owner,
-#                repo: context.repo.repo,
-#                body: body
-#            })
+  #      # If this is a PR post the changes
+  #      - name: Push Terraform Output to PR
+  #        if: github.ref != 'refs/heads/main'
+  #        uses: actions/github-script@v7
+  #        env:
+  #          SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+  #        with:
+  #          github-token: ${{ secrets.GITHUB_TOKEN }}
+  #          script: |
+  #            const body = `${process.env.SUMMARY}`;
+  #            github.rest.issues.createComment({
+  #                issue_number: context.issue.number,
+  #                owner: context.repo.owner,
+  #                repo: context.repo.repo,
+  #                body: body
+  #            })
 
   terraform-apply:
     name: "Terraform Apply"
@@ -209,7 +209,6 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
 
-  
   docs:
     runs-on: ubuntu-latest
     steps:
@@ -218,35 +217,34 @@ jobs:
       - uses: ZacJW/markdown-html-action@1.1.0
         with:
           input_files: '[["docs/*.md"]]'
-          output_files: '["docs.html"]'
+          output_files: '["docs_out/docs.html"]'
           #builtin_stylesheet: 'style.css'
-          packages: 'pymdown-extensions'
+          packages: "pymdown-extensions"
           extensions: '["pymdownx.extra"]'
           # Save plan to artifacts
-      - name: Publish Terraform Plan
+      - name: Publish Generated Docs Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: docs.html
-          path: docs.html
+          path: docs_out/docs.html
 
-  #publish-docs:
-  #  runs-on: ubuntu-latest
-  #  needs: docs
-  #  steps:
-  #            # Download saved plan from artifacts
-  #    - name: Download Docs File
-  #      uses: actions/download-artifact@v4
-  #      with:
-  #        name: docs.html
-  #          # Download saved plan from artifacts
-  #    - name: Upload to S3 Storage
-  #      uses: shallwefootball/s3-upload-action@master
-  #      with:
-  #        aws_key_id: ${{ secrets.AWS_KEY_ID }}
-  #        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-  #        aws_bucket: ${{ secrets.AWS_BUCKET }}
-  #        source_dir: 'dirname'
-  #        endpoint: s3.apps.cyber.psych0si.is
+  publish-docs:
+    runs-on: ubuntu-latest
+    needs: docs
+    steps:
+      - name: Download Docs File
+        uses: actions/download-artifact@v4
+        with:
+          name:
+            docs.html
+      - name: Upload to S3 Storage
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: ${{ secrets.AWS_BUCKET }}
+          source_dir: "docs_out"
+          endpoint: s3.cyber.psych0si.is
 
   notifications:
     needs: [ansible, nomad, terraform-apply]
