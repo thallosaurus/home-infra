@@ -60,6 +60,7 @@ jobs:
           policy-file: acls/tailscale.hujson
 
   nomad:
+    name: Register Nomad Volumes
     needs: ansible
     runs-on: ubuntu-latest
     steps:
@@ -176,7 +177,7 @@ jobs:
   terraform-apply:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
-    if: needs.terraform-plan.outputs.tfplanExitCode == 2
+    #if: needs.terraform-plan.outputs.tfplanExitCode == 2
     needs: [terraform-plan]
 
     steps:
