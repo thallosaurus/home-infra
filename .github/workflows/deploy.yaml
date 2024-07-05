@@ -214,6 +214,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Create Output Dir
+        run: mkdir -p docs_out
       - uses: ZacJW/markdown-html-action@1.1.0
         with:
           input_files: '[["docs/*.md"]]'
