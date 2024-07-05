@@ -206,7 +206,7 @@ jobs:
         with:
           input_files: '[["docs/*.md"]]'
           output_files: '["docs.html"]'
-          builtin_stylesheet: 'style.css'
+          #builtin_stylesheet: 'style.css'
           packages: 'pymdown-extensions'
           extensions: '["pymdownx.extra"]'
           # Save plan to artifacts
