@@ -92,8 +92,7 @@ jobs:
       - name: Terraform Plan
         id: tf-plan
         run: |
-          export exitcode=0
-          terraform plan -detailed-exitcode -no-color -out tfplan
+          terraform plan -detailed-exitcode -no-color -out tfplan || exit 0
 
       # Save plan to artifacts
       - name: Publish Terraform Plan
