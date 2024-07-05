@@ -1,5 +1,11 @@
 name: Deploy Nomad Config
-on: [push]
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
 
 env:
   NOMAD_ADDR: ${{ secrets.NOMAD_ADDR }}
@@ -8,6 +14,7 @@ env:
 jobs:
   ansible:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -87,6 +94,12 @@ jobs:
   terraform-plan:
     runs-on: ubuntu-latest
     needs: ansible
+    env:
+      #this is needed since we are running terraform with read-only permissions
+      ARM_SKIP_PROVIDER_REGISTRATION: true
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -158,27 +171,27 @@ jobs:
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
-  #      # If this is a PR post the changes
-  #      - name: Push Terraform Output to PR
-  #        if: github.ref != 'refs/heads/main'
-  #        uses: actions/github-script@v7
-  #        env:
-  #          SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
-  #        with:
-  #          github-token: ${{ secrets.GITHUB_TOKEN }}
-  #          script: |
-  #            const body = `${process.env.SUMMARY}`;
-  #            github.rest.issues.createComment({
-  #                issue_number: context.issue.number,
-  #                owner: context.repo.owner,
-  #                repo: context.repo.repo,
-  #                body: body
-  #            })
+      # If this is a PR post the changes
+      - name: Push Terraform Output to PR
+        if: github.ref != 'refs/heads/main'
+        uses: actions/github-script@v7
+        env:
+          SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = `${process.env.SUMMARY}`;
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+            })
 
   terraform-apply:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
-    #if: needs.terraform-plan.outputs.tfplanExitCode == 2
+    if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
     needs: [terraform-plan]
 
     steps:
@@ -237,31 +250,30 @@ jobs:
       - name: Download Docs File
         uses: actions/download-artifact@v4
         with:
-          name:
-            docs.html
-#      - name: Upload to S3 Storage
-#        uses: shallwefootball/s3-upload-action@master
-#        with:
-#          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-#          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-#          aws_bucket: ${{ secrets.AWS_BUCKET }}
-#          source_dir: "."
-#          endpoint: s3.cyber.psych0si.is
+          name: docs.html
+  #      - name: Upload to S3 Storage
+  #        uses: shallwefootball/s3-upload-action@master
+  #        with:
+  #          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+  #          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+  #          aws_bucket: ${{ secrets.AWS_BUCKET }}
+  #          source_dir: "."
+  #          endpoint: s3.cyber.psych0si.is
 
-      - name: Upload to Amazon S3
-        uses: Noelware/s3-action@2.2.6
-        with:
-          files: |
-              docs.html
-
-          access-key-id: ${{ secrets.AWS_KEY_ID }}
-          path-format: '/$(tag)'
-          secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          endpoint: https://s3.cyber.psych0si.is
-          #prefix: /artifacts
-          #region: us-east-1
-          bucket: ${{ secrets.AWS_BUCKET }}
-          enforce-path-access-style: true
+  #      - name: Upload to Amazon S3
+  #        uses: Noelware/s3-action@2.2.6
+  #        with:
+  #          files: |
+  #              docs.html
+  #
+  #          access-key-id: ${{ secrets.AWS_KEY_ID }}
+  #          path-format: '/$(tag)'
+  #          secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #          endpoint: https://s3.cyber.psych0si.is
+  #          #prefix: /artifacts
+  #          #region: us-east-1
+  #          bucket: docs
+  #          enforce-path-access-style: true
 
   notifications:
     needs: [ansible, nomad, terraform-apply]
