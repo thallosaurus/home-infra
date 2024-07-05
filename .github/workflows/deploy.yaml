@@ -200,6 +200,8 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - uses: ZacJW/markdown-html-action@1.1.0
         with:
           input_files: '[["docs/*.md]]'
@@ -213,7 +215,7 @@ jobs:
         with:
           name: docs.html
           path: docs.html
-          
+
   notifications:
     needs: [ansible, nomad, terraform-apply]
     runs-on: ubuntu-latest
