@@ -204,7 +204,7 @@ jobs:
         uses: actions/checkout@v4
       - uses: ZacJW/markdown-html-action@1.1.0
         with:
-          input_files: '[["docs/*.md]]'
+          input_files: '[["docs/*.md"]]'
           output_files: '["docs.html"]'
           builtin_stylesheet: 'style.css'
           packages: 'pymdown-extensions'
