@@ -249,7 +249,7 @@ jobs:
 #          endpoint: s3.cyber.psych0si.is
 
       - name: Upload to Amazon S3
-        uses: Noelware/s3-action@2 # this can be `master` or a tagged release
+        uses: Noelware/s3-action@2.2.6
         with:
           files: |
               docs.html
