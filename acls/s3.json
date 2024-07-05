@@ -35,7 +35,8 @@
             ],
             "actions": [
                 "Read:docs",
-                "List:docs"
+                "List:docs",
+                "Write:docs"
             ]
         }
     ]
