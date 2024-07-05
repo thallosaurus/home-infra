@@ -74,8 +74,8 @@ EOF
 
   group "seaweedfs" {
     network {
-      port "http" {
-        to = "8333"
+      port "master" {
+        to = "9333"
       }
 
       port "filer" {
@@ -88,10 +88,19 @@ EOF
       port "webdav" {
 
       }
+
+      port "volserver" {
+        to = "8080"
+      }
     }
 
     service {
-      name = "seaweedfs-s3"
+      name = "weedmaster"
+      port = "master"
+    }
+
+    service {
+      name = "s3"
       port = "s3"
       tags = [
         "traefik",
@@ -151,7 +160,7 @@ EOF
         image = "chrislusf/seaweedfs"
         args  = ["server", "-s3", "-s3.port=${NOMAD_PORT_s3}", "-s3.config=/config.json", "-dir=/data", "-filer=true"]
         //, "-webdav", "-webdav.port=${NOMAD_PORT_webdav}"]
-        ports = ["http", "s3", "webdav", "filer"]
+        ports = ["master", "s3", "webdav", "filer"]
 
         mount {
           type   = "bind"

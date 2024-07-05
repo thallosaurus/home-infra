@@ -227,24 +227,24 @@ jobs:
           name: docs.html
           path: docs.html
 
-  publish-docs:
-    runs-on: ubuntu-latest
-    needs: terraform-apply
-    steps:
-              # Download saved plan from artifacts
-      - name: Download Docs File
-        uses: actions/download-artifact@v4
-        with:
-          name: docs.html
-            # Download saved plan from artifacts
-      - name: Upload to S3 Storage
-        uses: shallwefootball/s3-upload-action@master
-        with:
-          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          aws_bucket: ${{ secrets.AWS_BUCKET }}
-          source_dir: 'dirname'
-          endpoint: s3.apps.cyber.psych0si.is
+  #publish-docs:
+  #  runs-on: ubuntu-latest
+  #  needs: docs
+  #  steps:
+  #            # Download saved plan from artifacts
+  #    - name: Download Docs File
+  #      uses: actions/download-artifact@v4
+  #      with:
+  #        name: docs.html
+  #          # Download saved plan from artifacts
+  #    - name: Upload to S3 Storage
+  #      uses: shallwefootball/s3-upload-action@master
+  #      with:
+  #        aws_key_id: ${{ secrets.AWS_KEY_ID }}
+  #        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+  #        aws_bucket: ${{ secrets.AWS_BUCKET }}
+  #        source_dir: 'dirname'
+  #        endpoint: s3.apps.cyber.psych0si.is
 
   notifications:
     needs: [ansible, nomad, terraform-apply]
