@@ -17,7 +17,6 @@
     dest: /etc/nomad.d/server.hcl
   when: ansible_hostname == "snappy"
 
-
 - name: Prepare Consul Config folder
   shell: rm -rf /etc/consul.d/*
 

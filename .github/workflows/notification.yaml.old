@@ -1,5 +1,0 @@
-name: Notify
-on: [push]
-
-jobs:
-  
