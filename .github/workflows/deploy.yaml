@@ -195,6 +195,25 @@ jobs:
       # Terraform Apply
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
+
+  
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ZacJW/markdown-html-action@1.1.0
+        with:
+          input_files: '[["docs/*.md]]'
+          output_files: '["docs.html"]'
+          builtin_stylesheet: 'style.css'
+          packages: 'pymdown-extensions'
+          extensions: '["pymdownx.extra"]'
+          # Save plan to artifacts
+      - name: Publish Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs.html
+          path: docs.html
+          
   notifications:
     needs: [ansible, nomad, terraform-apply]
     runs-on: ubuntu-latest
