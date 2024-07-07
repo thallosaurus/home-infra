@@ -8,8 +8,7 @@
     },
     {
       "type": "vlan",
-      "name": "home",
-      "master": "enp0s1",
+      "master": "{{ ansible_default_ipv4.interface }}",
       "mtu": 1500,
       "vlanId": 20,
       "linkInContainer": false,
@@ -27,7 +26,7 @@
     {
       "type": "firewall",
       "backend": "iptables",
-      "iptablesAdminChainName": "NOMAD-ADMIN"
+      "iptablesAdminChainName": "HOME-ADMIN"
     },
     {
       "type": "portmap",

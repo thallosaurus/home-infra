@@ -2,6 +2,11 @@ job "minecraft" {
   type = "service"
 
   group "mc" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "rastaman"
+    }
+
     network {
       mode = "bridge"
       port "minecraft" {
@@ -23,18 +28,18 @@ job "minecraft" {
     }
 
     volume "data" {
-      type            = "csi"
+      type            = "host"
       read_only       = false
-      source          = "nfs_minecraft"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      source          = "minecraft-data"
+      #attachment_mode = "file-system"
+      #access_mode     = "multi-node-multi-writer"
     }
 
     task "minecraft" {
       driver = "docker"
 
       resources {
-        memory = 1024
+        memory = 2048
       }
 
       volume_mount {

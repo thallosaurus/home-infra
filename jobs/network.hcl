@@ -21,10 +21,26 @@ job "network" {
 
     task "bind9" {
       driver = "docker"
+
+      template {
+        destination = "tmp/rndc.key"
+        data        = <<EOH
+key "rndc-home-key" {
+        algorithm hmac-sha256;
+
+{{- with nomadVar "nomad/jobs/network/dns" -}}
+        secret "{{ .rndc_home_key }}";
+{{- end -}}
+
+};
+        EOH
+      }
       template {
         destination = "tmp/named.conf.local"
         data        = <<EOH
 //include "/etc/bind/zones.rfc1918";
+
+include "/etc/bind/rndc.key";
 
 zone "apps.cyber.psych0si.is" {
   type master;
@@ -39,6 +55,12 @@ zone "int.cyber.psych0si.is" {
 zone "0.0.10.in-addr.arpa" {
   type master;
   file "/etc/bind/zones/db.0.0.10.in-addr.arpa";
+};
+
+zone "home.cyber.psych0si.is" {
+  type master;
+  file "/etc/bind/zones/db.home.cyber.psych0si.is";
+  allow-update { key rndc-home-key; };
 };
 
 zone "consul" IN {
@@ -82,14 +104,29 @@ options {
         data        = file("./appdata/dns/db.apps.cyber.psych0si.is")
       }
 
+      template {
+        destination = "tmp/db.home.cyber.psych0si.is"
+        data        = file("./appdata/dns/db.home.cyber.psych0si.is")
+      }
+
       config {
         image = "ubuntu/bind9"
         ports = ["dns"]
         mounts = [
           {
             type   = "bind"
+            target = "/etc/bind/rndc.key"
+            source = "tmp/rndc.key"
+          },
+          {
+            type   = "bind"
             target = "/etc/bind/zones/db.int.cyber.psych0si.is"
             source = "tmp/db.int.cyber.psych0si.is"
+          },
+          {
+            type   = "bind"
+            target = "/etc/bind/zones/db.home.cyber.psych0si.is"
+            source = "tmp/db.home.cyber.psych0si.is"
           },
           {
             type   = "bind"
@@ -142,14 +179,14 @@ options {
       }
 
       config {
-        image = "dockurr/dnsmasq"
-        ports = ["dhcp1", "dhcp2"]
+        image      = "dockurr/dnsmasq"
+        ports      = ["dhcp1", "dhcp2"]
         privileged = true
 
         network_mode = "host"
 
         mount {
-          type = "bind"
+          type   = "bind"
           source = "tmp/dnsmasq.conf"
           target = "/etc/dnsmasq.conf"
         }

@@ -8,3 +8,5 @@ bind_addr = "0.0.0.0"
 
 plugin_dir = "/opt/nomad/plugins"
 #driver.raw_exec.enable = true
+
+log_level = "DEBUG"

@@ -33,7 +33,16 @@
 - name: Configure bridge network
   ansible.builtin.shell: echo 1 | tee /proc/sys/net/bridge/bridge-nf-call-arptables && echo 1 | tee /proc/sys/net/bridge/bridge-nf-call-ip6tables && echo 1 | tee /proc/sys/net/bridge/bridge-nf-call-iptables
 
-- name: Sync CNI Configs
-  ansible.posix.synchronize:
-    src: ../cni/
-    dest: /opt/cni/config/
+#- name: Sync CNI Configs
+#  ansible.posix.synchronize:
+#    src: ../cni/
+#    dest: /opt/cni/config/
+- name: Add Home CNI Config
+  template:
+    src: ../cni/home.conflist
+    dest: /opt/cni/config/home.conflist
+
+- name: Add Test CNI Config
+  template:
+    src: ../cni/test.conflist
+    dest: /opt/cni/config/test.conflist

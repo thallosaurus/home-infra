@@ -4,4 +4,9 @@ client {
   options = {
     "driver.raw_exec.enable" = "1"
   }
+
+  host_volume "minecraft-data" {
+    path      = "/opt/minecraft"
+    read_only = false
+  }
 }
