@@ -15,7 +15,7 @@ jobs:
   ansible:
     runs-on: ubuntu-latest
     #if: github.ref == 'refs/heads/main'
-    if: "contains(github.event.head_commit.message, 'apply:')"
+    if: github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'apply:')
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -192,7 +192,7 @@ jobs:
   terraform-apply:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
+    if: needs.terraform-plan.outputs.tfplanExitCode == 2
     needs: [terraform-plan]
 
     steps:
@@ -272,7 +272,7 @@ jobs:
               index.html
 
           access-key-id: ${{ secrets.AWS_KEY_ID }}
-          path-format: '/$(tag)'
+          path-format: '/$(file)'
           secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           endpoint: http://s3.apps.cyber.psych0si.is
           #prefix: /artifacts

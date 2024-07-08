@@ -67,3 +67,10 @@ resource "nomad_job" "minecraft" {
     allow_fs = true
   }
 }
+
+resource "nomad_job" "tor" {
+  jobspec = file("${path.module}/jobs/tor.hcl")
+  hcl2 {
+    allow_fs = true
+  }
+}
