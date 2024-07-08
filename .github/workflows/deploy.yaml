@@ -242,7 +242,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: docs/
-#          name: docs
+          name: documentation
 
   publish-docs:
     runs-on: ubuntu-latest
@@ -251,11 +251,13 @@ jobs:
       - name: Download Docs File
         uses: actions/download-artifact@v4
         with:
-          name: index.html
+          name: documentation
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.TS_AUTHKEY }}
+      - name: Ls directory
+        run: ls
 #        - name: Upload to S3 Storage
 #          uses: shallwefootball/s3-upload-action@master
 #          with:
