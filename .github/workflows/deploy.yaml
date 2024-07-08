@@ -15,7 +15,7 @@ jobs:
   ansible:
     runs-on: ubuntu-latest
     #if: github.ref == 'refs/heads/main'
-    if: "!contains(github.event.head_commit.message, 'apply:')"
+    if: "contains(github.event.head_commit.message, 'apply:')"
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
