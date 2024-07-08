@@ -4,4 +4,9 @@ client {
   options = {
     "driver.raw_exec.enable" = "1"
   }
+
+  host_volume "pihole-data" {
+    path      = "/opt/pihole"
+    read_only = false
+  }
 }

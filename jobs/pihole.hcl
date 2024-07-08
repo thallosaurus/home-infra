@@ -29,15 +29,17 @@ job "pihole" {
     }
 
     volume "pihole-data" {
-      type            = "csi"
-      read_only       = false
-      source          = "nfs_pihole"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      type      = "host"
+      read_only = false
+      source    = "pihole-data"
+      //attachment_mode = "file-system"
+      //access_mode     = "multi-node-multi-writer"
     }
 
     task "pihole" {
       driver = "docker"
+
+      user = "root"
 
       template {
         destination = "secrets/admin.env"
@@ -49,6 +51,13 @@ WEBPASSWORD={{ .root_password }}
         env         = true
       }
 
+      template {
+        destination = "local/97-negcache.conf"
+        data        = <<EOH
+no-negcache
+        EOH
+      }
+
       volume_mount {
         volume      = "pihole-data"
         destination = "/etc/pihole"
@@ -58,6 +67,13 @@ WEBPASSWORD={{ .root_password }}
       config {
         image = "pihole/pihole"
         ports = ["dns", "http"]
+        # privileged = true
+
+        mount {
+          type   = "bind"
+          target = "/etc/dnsmasq.d/97-negcache.conf"
+          source = "local/97-negcache.conf"
+        }
       }
     }
   }

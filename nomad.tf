@@ -1,10 +1,3 @@
-resource "nomad_job" "job_a" {
-  jobspec = file("${path.module}/jobs/demo.hcl")
-  hcl2 {
-    allow_fs = true
-  }
-}
-
 resource "nomad_job" "vpn" {
   jobspec = file("${path.module}/jobs/vpn.hcl")
   hcl2 {

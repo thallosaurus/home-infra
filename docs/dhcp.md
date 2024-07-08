@@ -1,2 +1,3 @@
-# Kea
-Ports: 8080/tcp, 67/udp, 68/udp
+# DHCP
+- Software: dnsmasq
+- Ports: 67/udp, 68/udp
