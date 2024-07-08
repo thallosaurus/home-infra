@@ -74,3 +74,10 @@ resource "nomad_job" "tor" {
     allow_fs = true
   }
 }
+
+resource "nomad_job" "pihole" {
+  jobspec = file("${path.module}/jobs/pihole.hcl")
+  hcl2 {
+    allow_fs = true
+  }
+}

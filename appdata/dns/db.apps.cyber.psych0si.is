@@ -22,4 +22,5 @@ influxdb       IN      CNAME       traefik.service.consul.
 webdav       IN      CNAME       traefik.service.consul.
 filer       IN      CNAME       traefik.service.consul.
 metube       IN      CNAME       traefik.service.consul.
+pihole       IN      CNAME       traefik.service.consul.
 ;gitea       IN      CNAME       traefik.service.consul.

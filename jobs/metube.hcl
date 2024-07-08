@@ -1,6 +1,10 @@
 # ghcr.io/alexta69/metube
 job "metube" {
   group "metube" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "pi4"
+    }
     network {
       port "http" {
         to = "8081"

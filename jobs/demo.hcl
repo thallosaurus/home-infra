@@ -21,6 +21,14 @@ job "demo-webapp" {
       port = "http"
     }
 
+    volume "data" {
+      type            = "csi"
+      read_only       = false
+      source          = "test-vol"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
+    }
+
     task "nginx" {
       driver = "docker"
 
@@ -43,6 +51,12 @@ job "demo-webapp" {
           type   = "bind"
           source = "local/index.html"
           target = "/usr/share/nginx/html/index.html"
+        }
+
+        volume_mount {
+          volume = "data"
+          destination = "/usr/share/nginx/html/test"
+          read_only = false
         }
       }
     }

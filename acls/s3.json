@@ -6,7 +6,8 @@
             "actions": [
                 "Read:docs",
                 "Read:public",
-                "Read:uploader"
+                "Read:uploader",
+                "List:docs"
             ]
         },
         {
