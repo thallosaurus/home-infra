@@ -238,7 +238,7 @@ jobs:
 #          packages: "pymdown-extensions"
 #          extensions: '["pymdownx.extra"]'
 #          # Save plan to artifacts
-      - name: Publish Generated Docs Artifacts
+      - name: Publish Generated Docs Artifacts (${{ github.ref_name }})
         uses: actions/upload-artifact@v4
         with:
           path: docs/
@@ -274,7 +274,7 @@ jobs:
               ./
 
           access-key-id: ${{ secrets.AWS_KEY_ID }}
-          path-format: '/$(file)'
+          path-format: '/$(branch)/$(file)'
           secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           endpoint: http://s3.apps.cyber.psych0si.is
           #prefix: /artifacts
@@ -285,7 +285,7 @@ jobs:
 #        env:
 #          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         run: |
-          echo "New Documentation is available [here](http://s3.apps.cyber.psych0si.is/docs/index.html)" >> $GITHUB_STEP_SUMMARY
+          echo "New Documentation is available [here](http://s3.apps.cyber.psych0si.is/docs/${{ github.ref_name }}/index.html)" >> $GITHUB_STEP_SUMMARY
 
   #notifications:
   #  needs: [ansible, nomad, terraform-apply]
