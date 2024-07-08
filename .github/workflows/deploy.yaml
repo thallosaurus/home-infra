@@ -251,29 +251,33 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: docs.html
-  #      - name: Upload to S3 Storage
-  #        uses: shallwefootball/s3-upload-action@master
-  #        with:
-  #          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-  #          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-  #          aws_bucket: ${{ secrets.AWS_BUCKET }}
-  #          source_dir: "."
-  #          endpoint: s3.cyber.psych0si.is
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TS_AUTHKEY }}
+#        - name: Upload to S3 Storage
+#          uses: shallwefootball/s3-upload-action@master
+#          with:
+#            aws_key_id: ${{ secrets.AWS_KEY_ID }}
+#            aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+#            aws_bucket: ${{ secrets.AWS_BUCKET }}
+#            source_dir: "."
+#            endpoint: s3.cyber.psych0si.is
 
-  #      - name: Upload to Amazon S3
-  #        uses: Noelware/s3-action@2.2.6
-  #        with:
-  #          files: |
-  #              docs.html
-  #
-  #          access-key-id: ${{ secrets.AWS_KEY_ID }}
-  #          path-format: '/$(tag)'
-  #          secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #          endpoint: http://s3.apps.cyber.psych0si.is
-  #          #prefix: /artifacts
-  #          #region: us-east-1
-  #          bucket: docs
-  #          enforce-path-access-style: true
+      - name: Upload to Amazon S3
+        uses: Noelware/s3-action@2.2.6
+        with:
+          files: |
+              docs.html
+
+          access-key-id: ${{ secrets.AWS_KEY_ID }}
+          path-format: '/$(tag)'
+          secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          endpoint: http://s3.apps.cyber.psych0si.is
+          #prefix: /artifacts
+          #region: us-east-1
+          bucket: docs
+          enforce-path-access-style: true
 
   #notifications:
   #  needs: [ansible, nomad, terraform-apply]
