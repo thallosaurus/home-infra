@@ -284,8 +284,9 @@ jobs:
       - name: Publish Docs Link to Summary
 #        env:
 #          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+          #echo "New Documentation is available [here](http://s3.apps.cyber.psych0si.is/docs/${{ github.ref_name }}/index.html)" >> $GITHUB_STEP_SUMMARY
         run: |
-          echo "New Documentation is available [here](http://s3.apps.cyber.psych0si.is/docs/${{ github.ref_name }}/index.html)" >> $GITHUB_STEP_SUMMARY
+          echo "New Documentation is available [here](http://s3.apps.cyber.psych0si.is/docs/index.html)" >> $GITHUB_STEP_SUMMARY
 
   #notifications:
   #  needs: [ansible, nomad, terraform-apply]
