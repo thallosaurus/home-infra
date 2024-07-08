@@ -270,7 +270,7 @@ jobs:
       - name: Upload to Amazon S3
         uses: Noelware/s3-action@2.2.6
         with:
-          files: |
+          directories: |
               ./
 
           access-key-id: ${{ secrets.AWS_KEY_ID }}
