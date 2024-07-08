@@ -267,20 +267,20 @@ jobs:
 #            source_dir: "."
 #            endpoint: s3.cyber.psych0si.is
 
-#      - name: Upload to Amazon S3
-#        uses: Noelware/s3-action@2.2.6
-#        with:
-#          files: |
-#              ./docs
-#
-#          access-key-id: ${{ secrets.AWS_KEY_ID }}
-#          path-format: '/$(file)'
-#          secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          endpoint: http://s3.apps.cyber.psych0si.is
-#          #prefix: /artifacts
-#          #region: us-east-1
-#          bucket: docs
-#          enforce-path-access-style: true
+      - name: Upload to Amazon S3
+        uses: Noelware/s3-action@2.2.6
+        with:
+          files: |
+              ./
+
+          access-key-id: ${{ secrets.AWS_KEY_ID }}
+          path-format: '/$(file)'
+          secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          endpoint: http://s3.apps.cyber.psych0si.is
+          #prefix: /artifacts
+          #region: us-east-1
+          bucket: docs
+          enforce-path-access-style: true
 
   #notifications:
   #  needs: [ansible, nomad, terraform-apply]
