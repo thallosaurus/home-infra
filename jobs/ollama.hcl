@@ -2,7 +2,7 @@ job "ollama" {
   group "ollama" {
     constraint {
       attribute = "${node.unique.name}"
-      value     = "pi4"
+      value     = "rastaman"
     }
     network {
       port "api" {
@@ -52,6 +52,14 @@ job "ollama" {
       }
     }
 
+    volume "data" {
+      type            = "csi"
+      read_only       = false
+      source          = "nfs_ollama_webui"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
+    }
+
     task "webui" {
       resources {
         memory = 1024
@@ -73,6 +81,12 @@ job "ollama" {
 
       #        env = true
       #      }
+
+      volume_mount {
+        volume      = "data"
+        destination = "/app/backend/data"
+        read_only   = false
+      }
 
       config {
         # docker run -d -p 3000:8080 -e OLLAMA_BASE_URL=https://example.com -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
