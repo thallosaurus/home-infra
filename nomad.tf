@@ -74,3 +74,10 @@ resource "nomad_job" "pihole" {
     allow_fs = true
   }
 }
+
+resource "nomad_job" "ollama" {
+  jobspec = file("${path.module}/jobs/ollama.hcl")
+  hcl2 {
+    allow_fs = true
+  }
+}

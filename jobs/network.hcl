@@ -57,6 +57,11 @@ zone "0.0.10.in-addr.arpa" {
   file "/etc/bind/zones/db.0.0.10.in-addr.arpa";
 };
 
+zone "1.0.10.in-addr.arpa" {
+  type master;
+  file "/etc/bind/zones/db.1.0.10.in-addr.arpa";
+};
+
 zone "home.cyber.psych0si.is" {
   type master;
   file "/etc/bind/zones/db.home.cyber.psych0si.is";
@@ -92,6 +97,11 @@ options {
       template {
         destination = "tmp/db.0.0.10.in-addr.arpa"
         data        = file("./appdata/dns/db.0.0.10.in-addr.arpa")
+      }
+
+      template {
+        destination = "tmp/db.1.0.10.in-addr.arpa"
+        data        = file("./appdata/dns/db.1.0.10.in-addr.arpa")
       }
 
       template {
@@ -137,6 +147,11 @@ options {
             type   = "bind"
             target = "/etc/bind/zones/db.0.0.10.in-addr.arpa"
             source = "tmp/db.0.0.10.in-addr.arpa"
+          },
+          {
+            type   = "bind"
+            target = "/etc/bind/zones/db.1.0.10.in-addr.arpa"
+            source = "tmp/db.1.0.10.in-addr.arpa"
           },
           {
             type   = "bind"
@@ -191,6 +206,34 @@ options {
           target = "/etc/dnsmasq.conf"
         }
       }
+    }
+  }
+
+  group "ntp" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "snappy"
+    }
+
+    network {
+      port "ntp" {
+        to     = "123"
+        static = "123"
+      }
+    }
+
+    task "chrony" {
+      driver = "docker"
+
+      env {
+        NTP_SERVERS = "pool.ntp.org"
+      }
+
+      config {
+        image = "dockurr/chrony"
+        ports = ["ntp"]
+      }
+
     }
   }
 }
