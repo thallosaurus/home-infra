@@ -1,5 +1,6 @@
 job "ollama" {
   group "ollama" {
+    count = 0
     constraint {
       attribute = "${node.unique.name}"
       value     = "rastaman"
@@ -26,6 +27,10 @@ job "ollama" {
     task "ollama" {
       driver = "docker"
 
+      resources {
+        memory = 1024
+      }
+
       volume_mount {
         volume      = "data"
         destination = "/root/.ollama"
@@ -40,7 +45,7 @@ job "ollama" {
   }
 
   group "webui" {
-
+    count = 0
     constraint {
       attribute = "${node.unique.name}"
       value     = "pi4"
