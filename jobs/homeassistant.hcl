@@ -98,7 +98,7 @@ homekit:
       }
       resources {
         cpu    = 800 # 500 MHz
-        memory = 512 # 512 MB
+        memory = 1024 # 512 MB
         network {
           mode = "bridge"
           port "homeassistant_core" { static = 8123 }
