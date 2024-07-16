@@ -1,0 +1,6 @@
+---
+- name: Disable IPv6
+  shell: echo net.ipv6.conf.all.disable_ipv6=1 >> /etc/sysctl.d/00-tunings.conf
+
+- name: Reload Kernel
+  shell: sysctl --system

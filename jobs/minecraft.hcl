@@ -13,6 +13,11 @@ job "minecraft" {
         to     = "25565"
         static = "25565"
       }
+
+      port "rcon" {
+        to = "25575"
+        static = "25575"
+      }
     }
 
     service {
@@ -50,11 +55,13 @@ job "minecraft" {
 
       env {
         EULA = "true"
+        CREATE_CONSOLE_IN_PIPE = "true"
       }
 
       config {
         image = "itzg/minecraft-server"
-        ports = ["minecraft"]
+        ports = ["minecraft", "rcon"]
+        interactive = true
       }
     }
   }

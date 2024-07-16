@@ -168,6 +168,7 @@ options {
     }
   }
 
+    /*
   group "dhcp" {
     constraint {
       attribute = "${node.unique.name}"
@@ -198,12 +199,41 @@ options {
         ports      = ["dhcp1", "dhcp2"]
         privileged = true
 
-        network_mode = "host"
+        #network_mode = "host"
 
         mount {
           type   = "bind"
           source = "tmp/dnsmasq.conf"
           target = "/etc/dnsmasq.conf"
+        }
+      }
+  }
+    }*/
+
+  group "kea" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "snappy"
+    }
+
+    task "kea" {
+      driver = "docker"
+
+      template {
+        data        = file("./appdata/kea/kea.hjson")
+        destination = "local/kea.json"
+      }
+
+      config {
+        image = "jonasal/kea-dhcp4:2"
+        args  = ["-c", "/kea/config/dhcp4.json"]
+        privileged = true
+        network_mode = "host"
+
+        mount {
+          type   = "bind"
+          target = "/kea/config/dhcp4.json"
+          source = "local/kea.json"
         }
       }
     }
