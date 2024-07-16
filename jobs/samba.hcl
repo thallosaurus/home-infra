@@ -31,6 +31,12 @@ job "fileserver" {
       source    = "samba-fs"
     }
 
+    volume "backup" {
+      type      = "host"
+      read_only = true
+      source    = "samba-backup"
+    }
+
     task "samba" {
       driver = "docker"
 
@@ -56,6 +62,12 @@ EOF
       volume_mount {
         volume      = "fs"
         destination = "/mnt"
+        read_only   = false
+      }
+
+      volume_mount {
+        volume      = "backup"
+        destination = "/baclup"
         read_only   = false
       }
 

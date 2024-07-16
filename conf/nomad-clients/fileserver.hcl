@@ -9,4 +9,9 @@ client {
     path      = "/mnt"
     read_only = false
   }
+
+  host_volume "samba-backup" {
+    path      = "/backup"
+    read_only = true
+  }
 }
