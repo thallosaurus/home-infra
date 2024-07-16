@@ -67,7 +67,7 @@ EOF
 
       volume_mount {
         volume      = "backup"
-        destination = "/baclup"
+        destination = "/backup"
         read_only   = false
       }
 
