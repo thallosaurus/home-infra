@@ -2,9 +2,15 @@ job "traefik" {
   type = "service"
 
   group "traefik" {
+    count = 2
+    #constraint {
+    #  attribute = "${node.unique.name}"
+    #  value     = "snappy"
+    #}
+
     constraint {
-      attribute = "${node.unique.name}"
-      value     = "snappy"
+      operator = "distinct_hosts"
+      value    = "true"
     }
     network {
       port "http" {
@@ -18,7 +24,7 @@ job "traefik" {
       }
 
       port "public" {
-        to = "8081"
+        to     = "8081"
         static = "8081"
       }
 
@@ -38,14 +44,14 @@ job "traefik" {
       ]
       #provider = "nomad"
 
-      check {
-        name     = "Traefik Check"
-        path     = "/dashboard/"
-        type     = "http"
-        protocol = "http"
-        interval = "10s"
-        timeout  = "2s"
-      }
+      #check {
+      #  name     = "Traefik Check"
+      #  path     = "/dashboard/"
+      #  type     = "http"
+      #  protocol = "http"
+      #  interval = "10s"
+      #  timeout  = "2s"
+      #}
     }
 
     service {
@@ -62,9 +68,13 @@ job "traefik" {
         args  = ["--configFile", "/local/Traefik.yml"]
       }
 
+      resources {
+        cpu = 1024
+      }
+
       template {
         destination = "/local/dynamic.yml"
-        data      = file("./appdata/traefik/dynamic.yml")
+        data        = file("./appdata/traefik/dynamic.yml")
       }
 
       template {

@@ -14,13 +14,11 @@ drone       IN      CNAME       traefik.service.consul.
 traefik-dashboard       IN      CNAME       traefik.service.consul.
 nas       IN      CNAME       samba.service.consul.
 assistant       IN      CNAME       traefik.service.consul.
-swfs       IN      CNAME       traefik.service.consul.
-headscale       IN      CNAME       traefik.service.consul.
 prometheus       IN      CNAME       traefik.service.consul.
 grafana       IN      CNAME       traefik.service.consul.
 influxdb       IN      CNAME       traefik.service.consul.
 webdav       IN      CNAME       traefik.service.consul.
-filer       IN      CNAME       traefik.service.consul.
 metube       IN      CNAME       traefik.service.consul.
 pihole       IN      CNAME       traefik.service.consul.
-;gitea       IN      CNAME       traefik.service.consul.
+kuma       IN      CNAME       traefik.service.consul.
+alertmanager       IN      CNAME       traefik.service.consul.

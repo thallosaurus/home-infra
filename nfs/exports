@@ -8,3 +8,5 @@
 /mnt/nfs/minecraft  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/ollama  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
 /mnt/nfs/ollama_webui  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/kuma  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
+/mnt/nfs/alertmanager  10.0.0.0/24(rw,no_subtree_check,insecure,no_root_squash)
