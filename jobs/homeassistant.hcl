@@ -1,6 +1,6 @@
 job "homeassistant" {
   type = "service"
-  update {
+  /*update {
     max_parallel      = 1
     min_healthy_time  = "10s"
     healthy_deadline  = "6m"
@@ -13,7 +13,7 @@ job "homeassistant" {
     health_check     = "checks"
     min_healthy_time = "15s"
     healthy_deadline = "10m"
-  }
+  }*/
   group "homeassistant" {
     count = 1
     constraint {
@@ -34,11 +34,11 @@ job "homeassistant" {
     #}
 
     volume "hoass-data" {
-      type            = "csi"
+      type            = "host"
       read_only       = false
-      source          = "nfs_hoass"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      source          = "hoass-data"
+      #attachment_mode = "file-system"
+      #access_mode     = "multi-node-multi-writer"
     }
 
     task "homeassistant_core" {
@@ -97,7 +97,7 @@ homekit:
         }
       }
       resources {
-        cpu    = 800 # 500 MHz
+        cpu    = 2000 # 500 MHz
         memory = 1024 # 512 MB
         network {
           mode = "bridge"

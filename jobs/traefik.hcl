@@ -2,7 +2,7 @@ job "traefik" {
   type = "service"
 
   group "traefik" {
-    count = 2
+    count = 1
     #constraint {
     #  attribute = "${node.unique.name}"
     #  value     = "snappy"

@@ -9,4 +9,9 @@ client {
     path      = "/opt/pihole"
     read_only = false
   }
+
+  host_volume "hoass-data" {
+    path      = "/opt/homeassistant"
+    read_only = false
+  }
 }

@@ -220,7 +220,54 @@ options {
       driver = "docker"
 
       template {
-        data        = file("./appdata/kea/kea.hjson")
+        data        = <<EOH
+{
+    "Dhcp4": {
+        "interfaces-config": {
+            "interfaces": [ "enp4s0.10" ],
+            "dhcp-socket-type": "raw"
+        },
+        "valid-lifetime": 4000,
+        "renew-timer": 1000,
+        "rebind-timer": 2000,
+
+        "subnet4": [{
+            "id": 1, // Required, must be unique between subnets.
+            "subnet": "10.0.1.0/24",  // Required
+            "pools": [ { "pool": "10.0.1.128-10.0.1.254" } ],
+            "option-data": [
+                {
+                    "name": "routers",
+                    "data": "10.0.1.1"
+                },
+                {{ range service "pihole" -}}
+                {
+                   "name": "domain-name-servers",
+                   "data": "{{ .Address }}"
+                }
+                {{ end }}
+            ]
+        }],
+
+        // No static leases (reservations) are defined here.
+        "reservations": [],
+
+        // Define a logger which outputs to stdout.
+        "loggers": [
+            {
+                "name": "kea-dhcp4",
+                "output_options": [
+                    {
+                        "output": "stdout",
+                        "pattern": "%D{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n"
+                    }
+                ],
+                "severity": "INFO"
+            }
+        ]
+    }
+}
+        EOH
         destination = "local/kea.json"
       }
 

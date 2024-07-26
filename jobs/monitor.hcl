@@ -154,6 +154,10 @@ scrape_configs:
         ports = ["http"]
         args  = ["--config.file=/etc/prometheus/prometheus.yml", "--web.external-url=http://prometheus.apps.cyber.psych0si.is/"]
       }
+
+      resources {
+        cpu = 500
+      }
     }
   }
 
@@ -274,6 +278,10 @@ receivers:
           target = "/config/alertmanager.yml"
         }
       }
+
+      resources {
+        cpu = 500
+      }
     }
   }
 
@@ -321,9 +329,13 @@ receivers:
         image = "grafana/grafana"
         ports = ["http"]
       }
+
+      resources {
+        cpu = 1000
+      }
     }
   }
-/*
+  /*
   group "influxdb" {
     network {
       #mode = "bridge"
