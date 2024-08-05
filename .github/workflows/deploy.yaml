@@ -245,57 +245,57 @@ jobs:
           path: docs/
           name: documentation
 
-  publish-docs:
-    runs-on: ubuntu-latest
-    needs: docs
-    steps:
-      - name: Download Docs File
-        uses: actions/download-artifact@v4
-        with:
-          name: documentation
-      - name: Tailscale
-        uses: tailscale/github-action@v2
-        with:
-          authkey: ${{ secrets.TS_AUTHKEY }}
-      - name: Ls directory
-        run: ls
-#        - name: Upload to S3 Storage
-#          uses: shallwefootball/s3-upload-action@master
-#          with:
-#            aws_key_id: ${{ secrets.AWS_KEY_ID }}
-#            aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-#            aws_bucket: ${{ secrets.AWS_BUCKET }}
-#            source_dir: "."
-#            endpoint: s3.cyber.psych0si.is
-
-      - name: Upload to Amazon S3
-        uses: Noelware/s3-action@2.2.6
-        with:
-          directories: |
-              ./
-
-          access-key-id: ${{ secrets.AWS_KEY_ID }}
-          path-format: '/${{ github.ref_name }}/$(file)'
-          secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          endpoint: http://s3.apps.cyber.psych0si.is
-          #prefix: /artifacts
-          #region: us-east-1
-          bucket: docs
-          enforce-path-access-style: true
-      - name: Publish Docs Link to Summary
-#        env:
-#          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
-        run: |
-          echo "New Documentation is available [here](http://s3.apps.cyber.psych0si.is/docs/${{ github.ref_name }}/index.html)" >> $GITHUB_STEP_SUMMARY
-
-  #notifications:
-  #  needs: [ansible, nomad, terraform-apply]
+  #publish-docs:
   #  runs-on: ubuntu-latest
+  #  needs: docs
   #  steps:
-  #    - name: Discord notification
-  #      env:
-  #        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-  #      uses: Ilshidur/action-discord@master
+  #    - name: Download Docs File
+  #      uses: actions/download-artifact@v4
   #      with:
-  #        args: "The project {{ EVENT_PAYLOAD.repository.full_name }} has been fully deployed."
+  #        name: documentation
+  #    - name: Tailscale
+  #      uses: tailscale/github-action@v2
+  #      with:
+  #        authkey: ${{ secrets.TS_AUTHKEY }}
+  #    - name: Ls directory
+  #      run: ls
+# #       - name: Upload to S3 Storage
+# #         uses: shallwefootball/s3-upload-action@master
+# #         with:
+# #           aws_key_id: ${{ secrets.AWS_KEY_ID }}
+# #           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+# #           aws_bucket: ${{ secrets.AWS_BUCKET }}
+# #           source_dir: "."
+# #           endpoint: s3.cyber.psych0si.is
 #
+  #    - name: Upload to Amazon S3
+  #      uses: Noelware/s3-action@2.2.6
+  #      with:
+  #        directories: |
+  #            ./
+#
+  #        access-key-id: ${{ secrets.AWS_KEY_ID }}
+  #        path-format: '/${{ github.ref_name }}/$(file)'
+  #        secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #        endpoint: http://s3.apps.cyber.psych0si.is
+  #        #prefix: /artifacts
+  #        #region: us-east-1
+  #        bucket: docs
+  #        enforce-path-access-style: true
+  #    - name: Publish Docs Link to Summary
+# #       env:
+# #         SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+  #      run: |
+  #        echo "New Documentation is available [here](http://s3.apps.cyber.psych0si.is/docs/${{ github.ref_name }}/index.html)" >> $GITHUB_STEP_SUMMARY
+#
+  ##notifications:
+  ##  needs: [ansible, nomad, terraform-apply]
+  ##  runs-on: ubuntu-latest
+  ##  steps:
+  ##    - name: Discord notification
+  ##      env:
+  ##        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+  ##      uses: Ilshidur/action-discord@master
+  ##      with:
+  ##        args: "The project {{ EVENT_PAYLOAD.repository.full_name }} has been fully deployed."
+##
