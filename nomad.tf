@@ -47,12 +47,12 @@ resource "nomad_job" "homeassistant" {
   }
 }*/
 
-/*resource "nomad_job" "samba" {
+resource "nomad_job" "samba" {
   jobspec = file("${path.module}/jobs/samba.hcl")
   hcl2 {
     allow_fs = true
   }
-}*/
+}
 
 /*resource "nomad_job" "minecraft" {
   jobspec = file("${path.module}/jobs/minecraft.hcl")
