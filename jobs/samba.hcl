@@ -181,7 +181,7 @@ EOF
   }
 
   group "webdav" {
-    length = 0
+    count = 0
     constraint {
       attribute = "${node.unique.name}"
       value     = "snappy"
