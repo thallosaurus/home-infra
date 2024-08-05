@@ -9,4 +9,9 @@ client {
     path      = "/opt/minecraft"
     read_only = false
   }
+
+    host_volume "samba-fs" {
+    path      = "/mnt/nfs"
+    read_only = false
+  }
 }

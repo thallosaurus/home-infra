@@ -1,10 +1,6 @@
 job "fileserver" {
   type = "service"
   group "samba" {
-    constraint {
-      attribute = "${node.unique.name}"
-      value     = "fileserver"
-    }
     network {
       port "smb" {
         to     = 445
@@ -31,11 +27,11 @@ job "fileserver" {
       source    = "samba-fs"
     }
 
-    volume "backup" {
-      type      = "host"
-      read_only = true
-      source    = "samba-backup"
-    }
+    #volume "backup" {
+    #  type      = "host"
+    #  read_only = true
+    #  source    = "samba-backup"
+    #}
 
     task "samba" {
       driver = "docker"
@@ -65,11 +61,11 @@ EOF
         read_only   = false
       }
 
-      volume_mount {
-        volume      = "backup"
-        destination = "/backup"
-        read_only   = false
-      }
+      #volume_mount {
+      #  volume      = "backup"
+      #  destination = "/backup"
+      #  read_only   = false
+      #}
 
       config {
         image = "dockurr/samba"
@@ -85,6 +81,7 @@ EOF
   }
 
   group "seaweedfs" {
+    count = 0
     network {
       port "master" {
         to = "9333"
@@ -184,6 +181,7 @@ EOF
   }
 
   group "webdav" {
+    length = 0
     constraint {
       attribute = "${node.unique.name}"
       value     = "snappy"

@@ -31,7 +31,7 @@
 
     - name: NFS Configs
       ansible.builtin.import_tasks: nfs-setup.yaml
-      when: ansible_hostname == "fileserver"
+      when: ansible_hostname == "rastaman"
       
     - name: Kernel Tunings
       ansible.builtin.import_tasks: kernel-tunings.yaml
